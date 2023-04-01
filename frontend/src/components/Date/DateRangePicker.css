@@ -1,0 +1,55 @@
+.date-container {
+    position: relative;
+    width: 50%;
+    height: 8%;
+    padding: 2px;
+    border-radius: 15px;
+    background: #2d3439;
+    box-shadow: 7px 7px 15px #1B1F22,
+        -7px -7px 15px #1B1F22;
+    margin: 5px auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.date-picker-label {
+    position: relative;
+    /* background-color: #c2cad0; */
+    font-size: 2rem;
+    width: 37.5%;
+    border-radius: 12px;
+    margin: 5px auto;
+
+}
+
+.dash {
+    width: 4px;
+    height: 1px;
+    background-color: #fff;
+    display: inline-block;
+    margin: 20px 0px;
+}
+
+.white-label label {
+    color: #fff;
+}
+
+.MuiInputBase-root {
+    border: 1px solid #ccc;
+}
+
+.MuiInputBase-root input,
+svg {
+    color: #fff;
+}
+
+.css-o9k5xi-MuiInputBase-root-MuiOutlinedInput-root {
+    height: 5vh;
+}
+
+.forward-icon {
+    margin-right: 6px;
+    color: #27AE60;
+    cursor: pointer;
+}

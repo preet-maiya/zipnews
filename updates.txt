@@ -1,7 +1,0 @@
-1. This is just an implementation of how we will be using maps, I will integrate this once we have the layout ready.
-2. This is a state-based map, it does three things:
-    a. On-hover it displays the stats of the state on the upper right corner.
-    b. On-click it zooms in to the state that was clicked and mainly it gives the name of the state for api use.
-
-things yet to do:
-1. on drag it moves to other places, but it only needs to show US.
