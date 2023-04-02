@@ -1,0 +1,22 @@
+.states {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+}
+
+select.selectOptions {
+    width: 70%;
+    height: 5vh;
+    border-radius: 15px;
+    border: 1px solid #ccc;
+    background-color: #2d3439;
+    color: #fff;
+    font-size: 1.5rem;
+    padding: 0 1rem;
+    margin: 10rem 0;
+}
+
+select.selectOptions:focus {
+    outline: none;
+}
