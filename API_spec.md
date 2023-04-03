@@ -34,7 +34,7 @@
 </details>
 
 <details>
- <summary><code>GET</code> <code><b>/news</b></code> <code>(Get count of news per state)</code></summary>
+ <summary><code>GET</code> <code><b>/news</b></code> <code>(Get news in a state for a specified time range)</code></summary>
 
 ##### Parameters
 
