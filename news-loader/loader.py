@@ -1,6 +1,9 @@
 import json
 import logging
 import uuid
+import os
+import pandas as pd
+import argparse
 
 import elasticsearch
 from google.cloud import bigquery
@@ -8,9 +11,20 @@ from google.oauth2 import service_account
 
 logging.basicConfig(level=logging.NOTSET)
 
-credentials = service_account.Credentials.from_service_account_file(
-    "/home/preetham/temp/gcloud-iam.json"
-)
+parser = argparse.ArgumentParser()
+parser.add_argument("--start-date", type=str,
+                    help="start-date")
+parser.add_argument("--end-date", type=str,
+                    help="end-date")
+
+args = parser.parse_args()
+
+LOAD_FROM_BQ = True if os.environ.get("LOAD_FROM_BQ", 0) else False
+LOCAL_DATASET = os.environ.get("LOCAL_DATASET", "dataset")
+SERVICE_ACCOUNT_FILE = os.environ.get("SERVICE_ACCOUNT_FILE", "/tmp/gcloud-iam.json")
+
+credentials = service_account.Credentials.from_service_account_file(SERVICE_ACCOUNT_FILE)
+
 # Construct a BigQuery client object.
 client = bigquery.Client(credentials=credentials)
 
@@ -86,6 +100,14 @@ def bulk_update(index_name, df):
   es.bulk(operations=generate_dataset(df, INDEX_NAME))
 
 
-dataset = get_bq_data(client, "2023-03-01", "2023-03-31")
+if LOAD_FROM_BQ:
+  dataset = get_bq_data(client, args.start_date, args.end_date)
+else:
+  print(args.start_date)
+  dataset = pd.read_csv(LOCAL_DATASET)
+  dataset['published_time'] = pd.to_datetime(dataset['published_time'])
+  dataset = dataset[(dataset['published_time']>=args.start_date) & (dataset['published_time']<=args.end_date)]
+
+
 dataset.to_csv("news_mar_2023.csv")
 bulk_update(INDEX_NAME, dataset)
