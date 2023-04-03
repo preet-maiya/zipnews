@@ -7,7 +7,7 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import ForwardIcon from '@mui/icons-material/Forward';
 import dayjs from 'dayjs';
 
-function DateRangePicker() {
+function DateRangePicker(props) {
     const [fromDate, setFromDate] = useState(null);
     const [toDate, setToDate] = useState(null);
 
@@ -23,7 +23,7 @@ function DateRangePicker() {
             fromDate: fromDate,
             toDate: toDate
         }
-        console.log(response)
+        props.onSelectingDates(response)
     }
     return (
         <LocalizationProvider dateAdapter={AdapterDayjs}>

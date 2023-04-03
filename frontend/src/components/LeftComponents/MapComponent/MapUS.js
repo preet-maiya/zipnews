@@ -5,7 +5,11 @@ import { MapContainer, TileLayer } from 'react-leaflet';
 import MapContent from "./MapContent";
 
 
-function MapUS() {
+function MapUS(props) {
+
+    const receiveUSState = (stateName) => {
+        props.onSelectingUSState(stateName)
+    }
     return (
         <div className="map">
             <MapContainer center={[45.255758, -104.156110]} zoom={3} scrollWheelZoom={false} style={{ width: '100%', height: '100%' }}>
@@ -14,7 +18,7 @@ function MapUS() {
                     url="https://{s}.tile.openstreetmap.us/{z}/{x}/{y}.png"
                     subdomains={['a', 'b', 'c', 'd']}
                 />
-                <MapContent />
+                <MapContent onSelectingUSState={receiveUSState} />
             </MapContainer>
         </div >
     )

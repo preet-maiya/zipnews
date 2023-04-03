@@ -4,7 +4,7 @@ import 'leaflet/dist/leaflet.css';
 import { statesData } from "./statesData";
 
 
-const MapContent = () => {
+const MapContent = (props) => {
     const geoJson = useRef(null);
     const map = useMap();
 
@@ -40,6 +40,7 @@ const MapContent = () => {
 
     const zoomToFeature = (e) => {
         map.fitBounds(e.target.getBounds());
+        props.onSelectingUSState(e.target.feature.properties.name)
     };
 
     return (
