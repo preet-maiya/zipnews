@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import './States.css'
 
-function States() {
-    const [selectedState, setSelected] = useState("");
+function States(props) {
+    const [selectedState, setSelectedState] = useState("");
     const states = [
         "Alabama",
         "Alaska",
@@ -57,20 +57,20 @@ function States() {
     ];
 
     const changeState = (e) => {
-        setSelected(e.target.value);
+        setSelectedState(e.target.value);
     }
-    
-      
+
+
     return (
         <div className="states">
-           <select className="selectOptions" value={selectedState} onChange={changeState}>
-            <option>Select a state</option>
-            {states.map((state) => (
-                <option key={state} value={state}>
-                    {state}
-                </option>
-            ))}
-           </select>
+            <select className="selectOptions" value={props.selectedState ? props.selectedState : selectedState} onChange={changeState}>
+                <option>Select a state</option>
+                {states.map((state) => (
+                    <option key={state} value={state}>
+                        {state}
+                    </option>
+                ))}
+            </select>
         </div>
     );
 }

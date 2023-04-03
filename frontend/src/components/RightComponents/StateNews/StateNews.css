@@ -10,10 +10,11 @@
 
 .news {
     width: 70%;
-    height: 90%;
+    height: 40%;
     border: 1px solid #ccc;
     background-color: #2d3439;
     color: #fff;
     padding: .6rem;
     font-size: 1.5rem;
+    border-radius: 10px;
 }
