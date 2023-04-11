@@ -1,8 +1,12 @@
 import React, { useState } from "react";
+import { useSelector, useDispatch } from 'react-redux'
+import store from "../../../store/store";
+import { changeState } from "../../../store/stateSlice";
 import './States.css'
 
-function States(props) {
-    const [selectedState, setSelectedState] = useState("");
+function States() {
+    const state = useSelector((state) => state.currentState.value)
+    const dispatch = useDispatch()
     const states = [
         "Alabama",
         "Alaska",
@@ -56,14 +60,18 @@ function States(props) {
         "Wyoming"
     ];
 
-    const changeState = (e) => {
-        setSelectedState(e.target.value);
+    const handleChangeState = (e) => {
+        const value = e.target.value;
+        if (value) {
+            dispatch(changeState(value));
+        }
+        // setSelectedState(value);
     }
 
 
     return (
         <div className="states">
-            <select className="selectOptions" value={props.selectedState ? props.selectedState : selectedState} onChange={changeState}>
+            <select className="selectOptions" value={state} onChange={handleChangeState}>
                 <option>Select a state</option>
                 {states.map((state) => (
                     <option key={state} value={state}>

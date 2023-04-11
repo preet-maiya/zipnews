@@ -2,10 +2,13 @@ import React, { useRef } from 'react';
 import { GeoJSON, useMap } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import { statesData } from "./statesData";
+import { useDispatch } from 'react-redux';
+import { changeState } from '../../../store/stateSlice';
 
 
-const MapContent = (props) => {
+const MapContent = () => {
     const geoJson = useRef(null);
+    const dispatch = useDispatch();
     const map = useMap();
 
     const highlightFeature = (e) => {
@@ -40,7 +43,7 @@ const MapContent = (props) => {
 
     const zoomToFeature = (e) => {
         map.fitBounds(e.target.getBounds());
-        props.onSelectingUSState(e.target.feature.properties.name)
+        dispatch(changeState(e.target.feature.properties.name))
     };
 
     return (
