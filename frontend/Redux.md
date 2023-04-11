@@ -4,7 +4,7 @@
     
         import { useSelector, useDispatch } from 'react-redux'
 
-2. Import the store and action creators to each component that requires the access of `currentState` and `changeState` reducer (make sure the path to them are correct). `changeState` is used to change the value of `currentState`. It requires a value as parameter, in this case the value of the the state that the user has clicked.
+2. Import the store and action creators to each component that requires the access of `currentState` and `changeState` reducer (make sure the path to them are correct). `changeState` is used to change the value of `currentState`. It requires a value as parameter, in this case the value would be the name of the state that the user has clicked.
 
         import store from "../../../store/store";
         // the code below is used to import the reducor (function) to change the currentState
