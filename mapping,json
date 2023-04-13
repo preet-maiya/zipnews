@@ -1,0 +1,61 @@
+PUT _index_template/news_template_1
+{
+  "index_patterns": ["news-*"],
+  "template": {
+    "settings": {
+      "number_of_shards": 1
+    },
+    "mappings": {
+      "_source": {
+        "enabled": true
+      },
+      "properties": {
+        "published_time": {
+            "type": "date",
+            "format": "yyyy-MM-dd HH:mm:ss"
+        },
+        "url": {
+            "type": "text"
+        },
+        "title": {
+            "type": "text"
+        },
+        "image_url": {
+            "type": "text"
+        },
+        "doc_tone": {
+            "type": "float"
+        },
+        "location": {
+            "type": "text"
+        },
+        "state_code": {
+            "type": "text"
+        },
+        "contextual_text": {
+            "type": "text"
+        },
+        "coordinates": {
+            "type": "geo_point"
+        },
+        "highlight_words": {
+            "type": "text"
+        },
+        "catogery": {
+            "type": "integer"
+        },
+        "source": {
+            "type": "text"
+        }
+    }
+    },
+    "aliases": {
+      "mydata": { }
+    }
+  },
+  "priority": 500, 
+  "version": 2,
+  "_meta": {
+    "description": "News templates"
+  }
+}

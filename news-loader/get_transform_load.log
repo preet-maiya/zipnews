@@ -1,0 +1,21 @@
+2023-04-13 07:37:21,324 — /Users/ashutoshgandhi/CUB/BDA/zipnews/news-loader/new_loader.py — INFO — Script execution STARTED.
+2023-04-13 07:37:21,330 — /Users/ashutoshgandhi/CUB/BDA/zipnews/news-loader/new_loader.py — INFO — ingesting data for file /Users/ashutoshgandhi/CUB/BDA/zipnews/news-loader/news_mar_2023.csv
+2023-04-13 07:37:21,330 — /Users/ashutoshgandhi/CUB/BDA/zipnews/news-loader/new_loader.py — DEBUG — Attempting to delete the index news-march first as requested.
+2023-04-13 07:37:21,393 — /Users/ashutoshgandhi/CUB/BDA/zipnews/news-loader/new_loader.py — DEBUG — Required index for deletion not found.
+2023-04-13 07:37:21,393 — /Users/ashutoshgandhi/CUB/BDA/zipnews/news-loader/new_loader.py — DEBUG — Making sure index news-march exists.
+2023-04-13 08:49:32,565 — /Users/ashutoshgandhi/CUB/BDA/zipnews/news-loader/new_loader.py — INFO — Script execution STARTED.
+2023-04-13 08:49:32,570 — /Users/ashutoshgandhi/CUB/BDA/zipnews/news-loader/new_loader.py — INFO — ingesting data for file /Users/ashutoshgandhi/CUB/BDA/zipnews/news-loader/news_mar_2023.csv
+2023-04-13 08:49:32,570 — /Users/ashutoshgandhi/CUB/BDA/zipnews/news-loader/new_loader.py — DEBUG — Attempting to delete the index news-march first as requested.
+2023-04-13 08:49:32,816 — /Users/ashutoshgandhi/CUB/BDA/zipnews/news-loader/new_loader.py — DEBUG — Making sure index news-march exists.
+2023-04-13 08:55:54,157 — /Users/ashutoshgandhi/CUB/BDA/zipnews/news-loader/new_loader.py — INFO — Script execution STARTED.
+2023-04-13 08:55:54,164 — /Users/ashutoshgandhi/CUB/BDA/zipnews/news-loader/new_loader.py — INFO — ingesting data for file /Users/ashutoshgandhi/CUB/BDA/zipnews/news-loader/news_mar_2023.csv
+2023-04-13 08:55:54,164 — /Users/ashutoshgandhi/CUB/BDA/zipnews/news-loader/new_loader.py — DEBUG — Attempting to delete the index news-march first as requested.
+2023-04-13 08:55:54,434 — /Users/ashutoshgandhi/CUB/BDA/zipnews/news-loader/new_loader.py — DEBUG — Making sure index news-march exists.
+2023-04-13 09:03:14,020 — /Users/ashutoshgandhi/CUB/BDA/zipnews/news-loader/new_loader.py — INFO — Script execution STARTED.
+2023-04-13 09:03:14,029 — /Users/ashutoshgandhi/CUB/BDA/zipnews/news-loader/new_loader.py — INFO — ingesting data for file /Users/ashutoshgandhi/CUB/BDA/zipnews/news-loader/news_mar_2023.csv
+2023-04-13 09:03:14,029 — /Users/ashutoshgandhi/CUB/BDA/zipnews/news-loader/new_loader.py — DEBUG — Attempting to delete the index news-march first as requested.
+2023-04-13 09:03:14,235 — /Users/ashutoshgandhi/CUB/BDA/zipnews/news-loader/new_loader.py — DEBUG — Making sure index news-march exists.
+2023-04-13 09:03:17,068 — /Users/ashutoshgandhi/CUB/BDA/zipnews/news-loader/new_loader.py — DEBUG — Bulk number 1 processed, already processed docs 0.
+2023-04-13 09:03:31,528 — /Users/ashutoshgandhi/CUB/BDA/zipnews/news-loader/new_loader.py — INFO — Refreshing index news-march to make indexed documents searchable.
+2023-04-13 09:03:31,736 — /Users/ashutoshgandhi/CUB/BDA/zipnews/news-loader/new_loader.py — INFO — Dataset from file /Users/ashutoshgandhi/CUB/BDA/zipnews/news-loader/news_mar_2023.csv loaded to Elasticsearch. Number of documents processed: 18496.
+2023-04-13 09:03:31,736 — /Users/ashutoshgandhi/CUB/BDA/zipnews/news-loader/new_loader.py — INFO — Script execution FINALIZED in 17.716290950775146 seconds. Dataset from file news-march loaded to Elasticsearch. Number of documents processed: 18496.

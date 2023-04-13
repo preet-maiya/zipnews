@@ -23,12 +23,15 @@ LOAD_FROM_BQ = True if os.environ.get("LOAD_FROM_BQ", 0) else False
 LOCAL_DATASET = os.environ.get("LOCAL_DATASET", "dataset")
 SERVICE_ACCOUNT_FILE = os.environ.get("SERVICE_ACCOUNT_FILE", "/tmp/gcloud-iam.json")
 
-credentials = service_account.Credentials.from_service_account_file(SERVICE_ACCOUNT_FILE)
+if LOAD_FROM_BQ:
+  credentials = service_account.Credentials.from_service_account_file(SERVICE_ACCOUNT_FILE)
 
-# Construct a BigQuery client object.
-client = bigquery.Client(credentials=credentials)
+#  Construct a BigQuery client object.
+  client = bigquery.Client(credentials=credentials)
 
 es = elasticsearch.Elasticsearch(hosts="http://localhost:9200")
+# es = elasticsearch.Elasticsearch(hosts="https://localhost:9200", ca_certs="/Users/ashutoshgandhi/BMCP/elasticsearch-8.6.1/config/certs/http_ca.crt",
+                    # basic_auth=("elastic","123456"))
 
 INDEX_NAME = "news"
 
@@ -106,8 +109,9 @@ else:
   print(args.start_date)
   dataset = pd.read_csv(LOCAL_DATASET)
   dataset['published_time'] = pd.to_datetime(dataset['published_time'])
+  dataset['published_time'] = dataset['published_time'].dt.strftime("%Y-%m-%d %H:%M:%S")
   dataset = dataset[(dataset['published_time']>=args.start_date) & (dataset['published_time']<=args.end_date)]
 
-
-dataset.to_csv("news_mar_2023.csv")
+dataset = dataset.drop(['Unnamed: 0.1', 'Unnamed: 0'], axis=1)
+dataset.to_csv("news_mar_2023.csv", encoding='utf-8', index=False)
 bulk_update(INDEX_NAME, dataset)
