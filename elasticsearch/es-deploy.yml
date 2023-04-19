@@ -6,7 +6,7 @@ spec:
   version: 8.7.0
   nodeSets:
   - name: default
-    count: 3
+    count: 1
     config:
       node.store.allow_mmap: false
       node.roles: ["master", "data", "ingest"]
@@ -19,4 +19,4 @@ spec:
         resources:
           requests:
             storage: 5Gi # increase this for larger dataset
-        storageClassName: standard
+        # storageClassName: standard

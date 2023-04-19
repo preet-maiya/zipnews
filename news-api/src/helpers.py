@@ -8,7 +8,7 @@ from elasticsearch.helpers import scan
 class ElasticClient(object):
     def __init__(self, hosts=[config.ES_CONNECTION_STRING], **kwargs):
         self.client = elasticsearch.Elasticsearch(hosts, ca_certs=config.ES_CERT_PATH,
-                    basic_auth=(config.ES_USER, config.ES_PASSWORD))
+                    basic_auth=(config.ES_USER, config.ES_PASSWORD), verify_certs=False)
     
     def search(self, index_name, search_query, **kwargs):
         try:

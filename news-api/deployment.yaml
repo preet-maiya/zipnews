@@ -20,7 +20,21 @@ spec:
             cpu: 100m
             memory: 200Mi
         ports:
-        - containerPort: 5000
+        - containerPort: 5005
         env:
         - name: VERSION
           value: "v1"
+        - name: ES_USER
+          value: "elastic"
+        - name: ES_HOST
+          value: "zipnews-es-http:9200"
+        - name: ES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: zipnews-es-elastic-user
+              key: elastic
+        - name: ES_CERT
+          valueFrom:
+            secretKeyRef:
+              name: zipnews-es-http-certs-public
+              key: tls.crt
