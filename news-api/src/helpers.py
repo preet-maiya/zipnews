@@ -56,9 +56,14 @@ def get_news_per_state(start_time, end_time, state_code):
         random_selection = results # select all available news
     news = []
     for article in random_selection:
+        src = article["_source"]
         info = {
-            "title": article["_source"]["title"],
-            "url": article["_source"]["url"]
+            "title": src["title"],
+            "url": src["url"],
+            "semantic_score": round(float(src["doc_tone"]), 3),
+            "location": src["location"],
+            "image_url": src["image_url"],
+            "pub_time": src["published_time"]
         }
         news.append(info)
     print(len(results))

@@ -10,6 +10,9 @@ ES_INDEX_NAME = "news-q1"
 
 NEWS_COUNT = 5
 
+DATE_FORMAT = "%Y-%m-%d %H:%M:%S" # 2023-01-01%2000:00:00
+NEWS_WINDOW = 2 # number of days
+
 ES_HOST = os.environ.get("ES_HOST", "localhost:9200")
 ES_USER = os.environ.get("ES_USER", "elastic")
 ES_PASSWORD = os.environ.get("ES_PASSWORD", "123456")

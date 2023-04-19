@@ -5,6 +5,7 @@ import datetime
 import traceback
 import requests
 from helpers import get_news_per_state, get_state_news_count
+from validator import valid_date_format, valid_dates
 
 
 app = Flask(__name__)
@@ -28,6 +29,9 @@ def get_news():
         start_time = request.args.get("start_time")
         end_time = request.args.get("end_time")
         state_code = request.args.get("state_code")
+        is_valid, err_resp = valid_dates(start_time, end_time, state_code)
+        if not is_valid:
+            return make_response(jsonify(err_resp), 400)
         news = get_news_per_state(start_time, end_time, state_code)
         resp = {
             "news": news,
@@ -36,11 +40,15 @@ def get_news():
         return make_response(jsonify(resp), 200)
     except Exception as ex:
         traceback.print_exc()
+        return make_response(jsonify({"status": "Failure", "message": "Internal Server Error"}), 500)
 
 @app.route(f"{base_route}/count", methods=["GET"])
 def get_count():
     try:
         date = request.args.get("date")
+        is_valid, err_resp = valid_date_format(date)
+        if not is_valid:
+            return make_response(jsonify(err_resp), 400)
         news_count = get_state_news_count(date)
         resp = {
             # "news": news,
@@ -49,6 +57,7 @@ def get_count():
         return make_response(jsonify(news_count), 200)
     except Exception as ex:
         traceback.print_exc()
+        return make_response(jsonify({"status": "Failure", "message": "Internal Server Error"}), 500)
 
 if __name__ == "__main__":
     app.run(port=config.PORT, host=config.HOST)
