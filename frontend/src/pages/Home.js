@@ -2,10 +2,10 @@ import React from 'react'
 import Map from '../components/Map'
 import { Box } from '@mui/material'
 
-const Home = () => {
+const Home = ({ heatmap }) => {
     return (
         <Box>
-            <Map />
+            <Map heatmap={heatmap} />
         </Box>
     )
 }

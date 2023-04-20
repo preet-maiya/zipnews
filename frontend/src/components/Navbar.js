@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Paper from '@mui/material/Paper';
+import { FormControl, FormControlLabel, Switch } from '@mui/material';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import { LocationOn } from '@mui/icons-material';
@@ -20,12 +21,22 @@ const states = [
     'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'
 ];
 
-const Navbar = () => {
-    const [selectedState, setSelectedState] = useState(null);
+const Navbar = ({ heatmapSelection }) => {
+    const [selectedState, setSelectedState] = useState("");
+
+    useEffect(() => {
+        console.log(selectedState);
+    }, [selectedState]);
 
     const handleSelect = (event, value) => {
-        setSelectedState(value);
+        setSelectedState(event.target.innerHTML);
     };
+
+    const handleSwitch = (e) => {
+        heatmapSelection(e.target.checked)
+    }
+
+
     return (
         <Stack direction="row" justifyContent="space-around" sx={{ gap: { sm: '123px', xs: '40px' }, mt: { sm: '20px', xs: '12px' } }} px="20px">
             <img src={Logo} alt="logo" style={{ width: '120px', height: '64px', margin: '0px 20px' }} />
@@ -33,7 +44,7 @@ const Navbar = () => {
                 component="form"
                 elevation={0}
                 sx={{
-                    p: '2px 4px', display: 'flex', alignItems: 'center', width: 300,
+                    p: '2px 4px', display: 'flex', alignItems: 'center', width: 300, height: 50,
                     borderRadius: '50px 50px 50px 50px',
                 }}
             >
@@ -58,6 +69,15 @@ const Navbar = () => {
                     )}
                 />
             </Paper>
+            <FormControl component="fieldset">
+                <FormControlLabel
+                    value="Heatmap"
+                    control={<Switch color="primary" />}
+                    label="Heatmap"
+                    labelPlacement="end"
+                    onChange={handleSwitch}
+                />
+            </FormControl>
         </Stack>
     )
 }

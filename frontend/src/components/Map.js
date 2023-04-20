@@ -6,7 +6,7 @@ import MapContent from "./MapContent";
 import { Box } from "@mui/material";
 
 
-function Map() {
+function Map({ heatmap }) {
 
     // const receiveUSState = (stateName) => {
     //     props.onSelectingUSState(stateName)
@@ -18,7 +18,7 @@ function Map() {
                     url="https://{s}.tile.openstreetmap.us/{z}/{x}/{y}.png"
                     subdomains={['a', 'b', 'c', 'd']}
                 />
-                <MapContent />
+                <MapContent heatmap={heatmap} />
             </MapContainer>
         </Box>
     );
