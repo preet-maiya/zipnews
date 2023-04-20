@@ -1,20 +1,17 @@
-import React, { useState } from "react";
-import "./App.css";
-import News from "./components/RightComponents/DisplayNews/News";
-import Sidebar from "./components/LeftComponents/SideBar/SideBar";
+import React from "react";
+import { Box } from "@mui/material";
 
-export default function App() {
-  let response = {}
-  const [selectedState, setSelectedState] = useState("")
-  const recievingResponse = (data) => {
-    response = data;
-    console.log(response.stateName)
-    setSelectedState(response.stateName);
-  }
+import "./App.css";
+import Navbar from "./components/Navbar";
+import Home from "./pages/Home";
+
+const App = () => {
   return (
-    <div className="parent-container">
-      <Sidebar handleResponse={recievingResponse} />                 {/*Left container*/}
-      <News selectedState={selectedState} />                    {/*Right container*/}
-    </div>
+    <Box width="400px" sx={{ width: { xl: '1488px' } }} m="auto">
+      <Navbar />
+      <Home />
+    </Box>
   )
 }
+
+export default App;
