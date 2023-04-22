@@ -11,7 +11,6 @@ const Home = () => {
     }
     const searchedValue = (e) => {
         setSearch(e);
-        console.log(`from home`)
     }
     return (
         <Box>

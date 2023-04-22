@@ -5,8 +5,10 @@ import { statesData } from "../util/statesData"
 import { Box } from '@mui/material';
 
 import ModalWindow from './ModalWindow';
+import { useDispatch, useSelector } from 'react-redux';
+import { changeState } from '../store/stateSlice';
 
-const MapContent = ({ heatmap, searchValue, handleRefresh }) => {
+const MapContent = ({ heatmap, handleRefresh }) => {
     const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
@@ -14,10 +16,12 @@ const MapContent = ({ heatmap, searchValue, handleRefresh }) => {
 
     const geoJson = useRef(null);
     const map = useMap();
-    const [state, setstate] = useState('');
+    const state = useSelector((state) => state.currentState.value)
+    const searchValue = useSelector((state) => state.searchValue.value)
+    const dispatch = useDispatch();
     useEffect(() => {
         if (searchValue) {
-            setstate('Hawaii');
+            dispatch(changeState(searchValue))
             setOpen(true);
         }
     }, [searchValue]);
@@ -76,7 +80,8 @@ const MapContent = ({ heatmap, searchValue, handleRefresh }) => {
 
     const zoomToFeature = (e) => {
         map.fitBounds(e.target.getBounds(), { maxZoom: 6 });
-        setstate(e.target.feature.properties.name);
+        // setstate(e.target.feature.properties.name);
+        dispatch(changeState(e.target.feature.properties.name));
         handleOpen();
         highlightFeature(e)
     };

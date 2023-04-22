@@ -4,8 +4,9 @@ import Divider from '@mui/material/Divider';
 import { LocationOn } from '@mui/icons-material';
 import { Close } from '@mui/icons-material';
 import Card from './NewsCard'
-// import store from '../store/store'
-// import { changeState } from '../store/stateSlice'
+import store from '../store/store'
+import { changeState } from '../store/stateSlice'
+import { useSelector } from 'react-redux';
 
 const states = [
     'Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado',
@@ -39,14 +40,10 @@ const style = {
 
 const ModalWindow = ({ open, handleClose, selectedState }) => {
 
-    const [state, setState] = useState(selectedState);
-    useEffect(() => {
-        setState(selectedState);
-    }, [selectedState]);
+    const state = useSelector((state) =>  state.currentState.value)
 
     const handleSelect = (e, value) => {
-        setState(e.target.innerHTML);
-        // stateSelection(e.target.innerHTML)
+        store.dispatch(changeState(e.target.innerHTML))
     };
     const AutocompleteComponent = (<Paper
         component="form"
