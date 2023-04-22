@@ -4,6 +4,8 @@ import Divider from '@mui/material/Divider';
 import { LocationOn } from '@mui/icons-material';
 import { Close } from '@mui/icons-material';
 import Card from './NewsCard'
+// import store from '../store/store'
+// import { changeState } from '../store/stateSlice'
 
 const states = [
     'Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado',
