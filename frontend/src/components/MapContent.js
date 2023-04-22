@@ -1,17 +1,26 @@
-import React, { useRef, useState } from 'react';
-import { GeoJSON, useMap } from 'react-leaflet';
+import React, { useRef, useState, useEffect } from 'react';
+import { GeoJSON, useMap, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import { statesData } from "../util/statesData"
-import { Box, Backdrop, Modal, Fade, Button, Typography, IconButton } from '@mui/material';
+import { Box } from '@mui/material';
 
 import ModalWindow from './ModalWindow';
 
-const MapContent = ({ heatmap }) => {
-    const [open, setOpen] = React.useState(false);
+const MapContent = ({ heatmap, searchValue, handleRefresh }) => {
+    const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
+
+
     const geoJson = useRef(null);
     const map = useMap();
+    const [state, setstate] = useState('');
+    useEffect(() => {
+        if (searchValue) {
+            setstate('Hawaii');
+            setOpen(true);
+        }
+    }, [searchValue]);
 
     const styles = (f) => {
         return {
@@ -67,14 +76,13 @@ const MapContent = ({ heatmap }) => {
 
     const zoomToFeature = (e) => {
         map.fitBounds(e.target.getBounds(), { maxZoom: 6 });
+        setstate(e.target.feature.properties.name);
         handleOpen();
         highlightFeature(e)
-        // props.onSelectingUSState(e.target.feature.properties.name)
     };
 
     const mapPolygonColorToDensity = (density => {
         if (!heatmap) {
-            console.log("inside")
             return '#7EAFB4'
         }
         return density > 1000
@@ -89,6 +97,21 @@ const MapContent = ({ heatmap }) => {
                             ? '#4AA4A7'
                             : '#5FC5C5';
     })
+
+    // const legend = (
+    //     <Box sx={{
+    //         position: 'absolute',
+    //         bottom: '20px',
+    //         left: '20px',
+    //         backgroundColor: 'white',
+    //         padding: '10px',
+    //         borderRadius: '5px',
+    //         boxShadow: '0 1px 2px rgba(0,0,0,0.1)',
+    //         fontSize: '16px'
+    //     }}>
+    //         <p>State: {highlightedState ? highlightedState : 'Hover over a state'}</p>
+    //     </Box>
+    // );
     return (
         <Box>
             <GeoJSON
@@ -98,7 +121,8 @@ const MapContent = ({ heatmap }) => {
                 style={styles}
                 onEachFeature={handleOnEachFeatures}
             />
-            <ModalWindow open={open} handleClose={handleClose} />
+            {/* {legend} */}
+            <ModalWindow open={open} handleClose={handleClose} selectedState={state} />
         </Box>
     );
 };

@@ -1,9 +1,22 @@
-import React from 'react'
-import { Box, Backdrop, Modal, Fade, Button, Typography, IconButton, Stack } from '@mui/material';
+import React, { useEffect, useState } from 'react'
+import { Box, Backdrop, Modal, Fade, Button, Typography, IconButton, Stack, Paper, Autocomplete, TextField } from '@mui/material';
+import Divider from '@mui/material/Divider';
+import { LocationOn } from '@mui/icons-material';
 import { Close } from '@mui/icons-material';
-import SearchBar from './SearchBar';
 import Card from './NewsCard'
 
+const states = [
+    'Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado',
+    'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho',
+    'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana',
+    'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota',
+    'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada',
+    'New Hampshire', 'New Jersey', 'New Mexico', 'New York',
+    'North Carolina', 'North Dakota', 'Ohio', 'Oklahoma', 'Oregon',
+    'Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota',
+    'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia',
+    'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'
+];
 
 const style = {
     position: 'absolute',
@@ -20,7 +33,50 @@ const style = {
     outline: 'none',
 };
 
-const ModalWindow = ({ open, handleClose }) => {
+
+
+const ModalWindow = ({ open, handleClose, selectedState }) => {
+
+    const [state, setState] = useState(selectedState);
+    useEffect(() => {
+        setState(selectedState);
+    }, [selectedState]);
+
+    const handleSelect = (e, value) => {
+        setState(e.target.innerHTML);
+        // stateSelection(e.target.innerHTML)
+    };
+    const AutocompleteComponent = (<Paper
+        component="form"
+        elevation={0}
+        sx={{
+            p: '2px 4px', display: 'flex', alignItems: 'center', width: 300, height: 50,
+            borderRadius: '50px 50px 50px 50px',
+        }}
+    >
+        <IconButton sx={{ p: '10px' }} aria-label="menu">
+            <LocationOn />
+        </IconButton>
+        <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
+        <Autocomplete
+            width="200px"
+            options={states}
+            value={state}
+            onChange={handleSelect}
+            clearIcon={null}
+            renderInput={(params) => (
+                <TextField {...params} sx={{
+                    '& .MuiOutlinedInput-notchedOutline': {
+                        border: 'none',
+                    },
+                    width: "200px",
+                    alignItems: 'center',
+                }} label="State" variant="outlined" color="success" />
+
+            )}
+        />
+    </Paper>)
+
     return (
         <Modal
             aria-labelledby="transition-modal-title"
@@ -38,10 +94,10 @@ const ModalWindow = ({ open, handleClose }) => {
             <Fade in={open}>
                 <Box sx={style}>
                     <Stack direction="row" justifyContent="space-between">
-                        <Typography id="transition-modal-title" variant="h6" component="h2">
-                            State name
+                        <Typography fontWeight={600} color="#0A4C6A" id="transition-modal-title" sx={{ opacity: '0.5', display: { lg: 'block', xs: 'none' }, fontSize: '24px' }}>
+                            {state}
                         </Typography>
-                        <SearchBar />
+                        {AutocompleteComponent}
                         <IconButton onClick={handleClose}>
                             <Close />
                         </IconButton>
