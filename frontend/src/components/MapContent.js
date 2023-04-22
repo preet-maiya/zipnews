@@ -19,12 +19,12 @@ const MapContent = ({ heatmap, handleRefresh }) => {
     const state = useSelector((state) => state.currentState.value)
     const searchValue = useSelector((state) => state.searchValue.value)
     const dispatch = useDispatch();
-    useEffect(() => {
-        if (searchValue) {
-            dispatch(changeState(searchValue))
-            setOpen(true);
-        }
-    }, [searchValue]);
+    // useEffect(() => {
+    //     if (searchValue) {
+    //         dispatch(changeState(searchValue))
+    //         setOpen(true);
+    //     }
+    // }, [searchValue]);
 
     const styles = (f) => {
         return {

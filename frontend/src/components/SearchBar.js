@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { styled, alpha } from '@mui/material/styles';
 import { Box, IconButton } from '@mui/material';
 import InputBase from '@mui/material/InputBase';
@@ -53,6 +53,12 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 const SearchBar = ({ handleSearch }) => {
     const [searchValue, setSearchValue] = useState('');
 
+    const search = useSelector((state) => state.searchValue.value)
+
+    useEffect(() => {
+        setSearchValue(search)
+    }, [search])
+
     const dispatch = useDispatch();
 
     const onSearch = () => {
@@ -63,8 +69,6 @@ const SearchBar = ({ handleSearch }) => {
 
     const onChange = (e) => {
         setSearchValue(e.target.value);
-        // console.log(e.target)
-        // dispatch(changeSearch(e.target.value))
     }
 
     return (
