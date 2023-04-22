@@ -5,17 +5,14 @@ import Navbar from '../components/Navbar'
 
 const Home = () => {
     const [heatmap, setHeatmap] = useState(false)
-    const [search, setSearch] = useState("");
     const heatmapSelection = (e) => {
         setHeatmap(e);
     }
-    const searchedValue = (e) => {
-        setSearch(e);
-    }
+
     return (
         <Box>
-            <Navbar heatmapSelection={heatmapSelection} searchedValue={searchedValue} />
-            <Map heatmap={heatmap} searchValue={search} />
+            <Navbar heatmapSelection={heatmapSelection} />
+            <Map heatmap={heatmap} />
         </Box>
     )
 }

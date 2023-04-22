@@ -50,7 +50,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     },
 }));
 
-const SearchBar = ({ handleSearch }) => {
+const SearchBar = ({ }) => {
     const [searchValue, setSearchValue] = useState('');
 
     const search = useSelector((state) => state.searchValue.value)

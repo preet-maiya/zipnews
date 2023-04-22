@@ -50,7 +50,11 @@ const ModalWindow = ({selectedState }) => {
             dispatch(changeState(searchValue))
             setOpen(true);
         }
-    }, [searchValue])
+
+        if(state) {
+            setOpen(true);
+        }
+    }, [searchValue, state])
 
     const handleClose = () => {
         setOpen(false);
