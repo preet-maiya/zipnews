@@ -7,6 +7,7 @@ import { Box } from '@mui/material';
 import ModalWindow from './ModalWindow';
 import { useDispatch, useSelector } from 'react-redux';
 import { changeState } from '../store/stateSlice';
+import { http } from '../assets/http';
 
 const MapContent = ({ heatmap, handleRefresh }) => {
     const [open, setOpen] = useState(false);
@@ -19,12 +20,20 @@ const MapContent = ({ heatmap, handleRefresh }) => {
     const state = useSelector((state) => state.currentState.value)
     const searchValue = useSelector((state) => state.searchValue.value)
     const dispatch = useDispatch();
+    const [count, setCount] = useState([]);
+
+    const getCount = () => {
+        http.get(`/v1/count?date=${''}`).then((res) => {
+            if (res.data) {
+                setCount(res.data.count)
+            }
+        }).catch((err) => {
+            console.log(err)
+        })
+    }
     // useEffect(() => {
-    //     if (searchValue) {
-    //         dispatch(changeState(searchValue))
-    //         setOpen(true);
-    //     }
-    // }, [searchValue]);
+    //      getCount()
+    // }, []);
 
     const styles = (f) => {
         return {
@@ -81,7 +90,7 @@ const MapContent = ({ heatmap, handleRefresh }) => {
     const zoomToFeature = (e) => {
         map.fitBounds(e.target.getBounds(), { maxZoom: 6 });
         // setstate(e.target.feature.properties.name);
-        dispatch(changeState(e.target.feature.properties.name));
+        dispatch(changeState((e.target.feature.properties.name)));
         handleOpen();
         highlightFeature(e)
     };

@@ -3,7 +3,6 @@ import { styled, alpha } from '@mui/material/styles';
 import { Box, IconButton } from '@mui/material';
 import InputBase from '@mui/material/InputBase';
 import SearchIcon from '@mui/icons-material/Search';
-import store from '../store/store'
 import { changeSearch } from '../store/searchSlice';
 import { useDispatch, useSelector } from 'react-redux';
 

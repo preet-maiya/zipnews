@@ -4,10 +4,11 @@ import Divider from '@mui/material/Divider';
 import { LocationOn } from '@mui/icons-material';
 import { Close } from '@mui/icons-material';
 import Card from './NewsCard'
-import store from '../store/store'
 import { changeState } from '../store/stateSlice'
 import { useDispatch, useSelector } from 'react-redux';
 import { changeSearch } from '../store/searchSlice';
+import {http} from '../assets/http'
+import { getStateCodeByStateName, getStateNameByStateCode, sanitizeStateCode, sanitizeStateName } from 'us-state-codes';
 
 const states = [
     'Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado',
@@ -21,6 +22,8 @@ const states = [
     'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia',
     'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'
 ];
+
+const stringStates = states.toString().toUpperCase();
 
 const style = {
     position: 'absolute',
@@ -39,11 +42,23 @@ const style = {
 
 
 
+
 const ModalWindow = ({selectedState }) => {
     const [open, setOpen] = useState(false);
+    const [news, setNews] = useState([]);
     const state = useSelector((state) =>  state.currentState.value)
     const searchValue = useSelector((state) => state.searchValue.value)
     const dispatch = useDispatch();
+
+    const getNews = () => {
+        http.get(`/v1/news?start_time=${''}&end_time=${''}&state_code=${getStateCodeByStateName(state)}`).then((res) => {
+            if(res.data.success) {
+                setNews([...news, ...res.data.news])
+            }
+        }).catch((err) => {
+            console.log(err)
+        })
+    }
 
     useEffect(() => {
         if (searchValue) {
@@ -63,7 +78,8 @@ const ModalWindow = ({selectedState }) => {
     }
 
     const handleSelect = (e, value) => {
-        store.dispatch(changeState(e.target.innerHTML))
+        dispatch(changeSearch(''));
+        dispatch(changeState(e.target.innerHTML))
     };
     const AutocompleteComponent = (<Paper
         component="form"
