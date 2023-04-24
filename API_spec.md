@@ -65,13 +65,71 @@
 >   "news": [
 >       {
 >           "title": "Election Tomorrow!",
->           "URL": "https://dummy.com/elections-tomorrow",
->           "sentiment_score": 0.7 
+>           "url": "https://dummy.com/elections-tomorrow",
+>           "image_url": "https://dummy.com/elections-tomorrow",
+>           "pub_time": "2023-01-11 07:45:00",
+>           "sentiment_score": 0.7,
+>           "location": "California, United States" 
 >       },    
 >       {
 >           "title": "Game Tomorrow!",
->           "URL": "https://dummy.com/elections-tomorrow",
->           "sentiment_score": 0.4 
+>           "url": "https://dummy.com/elections-tomorrow",
+>           "image_url": "https://dummy.com/elections-tomorrow",
+>           "pub_time": "2023-01-11 07:45:00",
+>           "sentiment_score": 0.4,
+>           "location": "California, United States"  
+>       },    
+>   ]
+>  }
+> ```
+
+</details>
+
+<details>
+ <summary><code>GET</code> <code><b>/search</b></code> <code>(search news in specified time range based on search phrase)</code></summary>
+
+##### Parameters
+
+> | name              |  type     | data type      | description                         |
+> |-------------------|-----------|----------------|-------------------------------------|
+> | `start_time`      |  required | string         | The date to get the count for       |
+> | `end_time`        |  required | string         | The date to get the count for       |
+> | `search_phrase`      |  required | string         | search phrase       |
+
+
+##### Responses
+
+> | http code     | content-type                      | response                                                            |
+> |---------------|-----------------------------------|---------------------------------------------------------------------|
+> | `200`         | `application/json`                | Json response                                                       |
+> | `400`         | `application/json`                | `{"code":"400","message":"Incorrect state code"}`
+
+##### Example cURL
+
+> ```javascript
+>  curl -X GET -H "Content-Type: application/json" http://localhost:8889/news?start_time=2023-01-10%2011:30:00&end_time=2023-01-30%2011:30:00&search_phrase=cinema
+> ```
+
+##### Example 200 Response
+
+> ```json
+>  {
+>   "news": [
+>       {
+>           "title": "Cinema Election Tomorrow!",
+>           "url": "https://dummy.com/elections-tomorrow",
+>           "image_url": "https://dummy.com/elections-tomorrow",
+>           "pub_time": "2023-01-11 07:45:00",
+>           "sentiment_score": 0.7,
+>           "location": "California, United States" 
+>       },    
+>       {
+>           "title": "cinema Tomorrow!",
+>           "url": "https://dummy.com/elections-tomorrow",
+>           "image_url": "https://dummy.com/elections-tomorrow",
+>           "pub_time": "2023-01-11 07:45:00",
+>           "sentiment_score": 0.4,
+>           "location": "California, United States"  
 >       },    
 >   ]
 >  }
