@@ -8,7 +8,7 @@ API_VERSION = "/v1"
 
 ES_INDEX_NAME = "news-q1"
 
-NEWS_COUNT = 5
+NEWS_COUNT = 10
 
 DATE_FORMAT = "%Y-%m-%d %H:%M:%S" # 2023-01-01%2000:00:00
 NEWS_WINDOW = 2 # number of days
@@ -19,9 +19,6 @@ ES_PASSWORD = os.environ.get("ES_PASSWORD", "123456")
 ES_CERT_PATH = os.environ.get("ES_CERT", "/Users/ashutoshgandhi/BMCP/elasticsearch-8.6.1/config/certs/http_ca.crt")
 ES_CONNECTION_STRING = f"https://{ES_USER}:{ES_PASSWORD}@{ES_HOST}"
 
-ES_CLUSTER_CONFIGS = {
-    "host": "https://elastic:123456@localhost:9200/"
-}
 
 STATE_COUNT_REQ_BODY = {
   "size" : 0,
@@ -65,6 +62,46 @@ STATE_SEARCH_REQ_BODY = {
         {
           "match": {
             "state_code": "{state_code}"
+          }
+        }
+      ]
+    }
+  },
+  "sort": [
+    {
+      "published_time": {
+        "order": "desc"
+      }
+    }
+  ]
+}
+
+SEARCH_REQ_BODY = {
+  "query": {
+    "bool": {
+      "must": [
+        {
+          "range": {
+            "published_time": {
+              "lte": "{end_time}",
+              "gte": "{start_time}"
+            }
+          }
+        },
+        {
+          "bool": {
+            "should": [
+              {
+                "match_phrase": {
+                  "title": "{search_phrase}"
+                }
+              },
+              {
+                "match_phrase": {
+                  "contextual_text": "{search_phrase}"
+                }
+              }
+            ]
           }
         }
       ]

@@ -18,7 +18,7 @@ class ElasticClient(object):
             traceback.print_exc()
     def scan_search(self, index_name, search_query, **kwargs):
         try:
-            resp = scan(self.client, query=search_query, index=index_name)
+            resp = scan(self.client, query=search_query, index=index_name, **kwargs)
             return resp
         except Exception as ex:
             traceback.print_exc()
@@ -29,16 +29,21 @@ except Exception as ex:
     traceback.print_exc()
     print("Failed to connect to elasticsearch")
 
-def replace_in_dict(input, variables):
-    result = {}
-    for key, value in input.items():
-        if isinstance(value, dict):
-            result[key] = replace_in_dict(value, variables)
-        elif isinstance(value, list):
-            result[key] = replace_in_dict(value[0], variables)
-        else:
-            result[key] = value % variables
-    return result
+def create_news_resp(results):
+    news = []
+    for article in results:
+        src = article["_source"]
+        info = {
+            "title": src["title"],
+            "url": src["url"],
+            "semantic_score": round(float(src["doc_tone"]), 3),
+            "location": src["location"],
+            "image_url": src["image_url"],
+            "pub_time": src["published_time"]
+        }
+        news.append(info)
+    return news
+
 
 def get_news_per_state(start_time, end_time, state_code):
     search_query = config.STATE_SEARCH_REQ_BODY
@@ -54,21 +59,23 @@ def get_news_per_state(start_time, end_time, state_code):
         random_selection = random.sample(results, config.NEWS_COUNT)
     else:
         random_selection = results # select all available news
-    news = []
-    for article in random_selection:
-        src = article["_source"]
-        info = {
-            "title": src["title"],
-            "url": src["url"],
-            "semantic_score": round(float(src["doc_tone"]), 3),
-            "location": src["location"],
-            "image_url": src["image_url"],
-            "pub_time": src["published_time"]
-        }
-        news.append(info)
+    news = create_news_resp(random_selection)
     print(len(results))
     # print(results[0])
+    return news
 
+def search_news_in_range(start_time, end_time, search_phrase):
+    search_query = config.SEARCH_REQ_BODY
+    search_query["query"]["bool"]["must"][0]["range"]["published_time"]["lte"] = end_time
+    search_query["query"]["bool"]["must"][0]["range"]["published_time"]["gte"] = start_time
+    search_query["query"]["bool"]["must"][1]["bool"]["should"][0]["match_phrase"]["title"] = search_phrase
+    search_query["query"]["bool"]["must"][1]["bool"]["should"][1]["match_phrase"]["contextual_text"] = search_phrase
+    print(search_query)
+    resp = es.scan_search(config.ES_INDEX_NAME, search_query)
+    results = []
+    for hit in resp:
+        results.append(hit)
+    news = create_news_resp(results)
     return news
 
 
