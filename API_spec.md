@@ -24,11 +24,16 @@
 ##### Example 200 Response
 
 > ```json
+>  [
 >  {
->   "CO": 250,
->   "AZ": 400,
->   ...
+>    "count": 1,
+>    "state_code": "MT"
+>  },
+>  {
+>    "count": 1,
+>    "state_code": "PR"
 >  }
+>  ]
 > ```
 
 </details>
