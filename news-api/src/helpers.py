@@ -88,7 +88,11 @@ def get_state_news_count(date):
     print(search_query)
     resp = es.search(config.ES_INDEX_NAME, search_query)
     # print(resp)
-    results = {}
+    results = []
     for state in resp["aggregations"]["state_code"]["buckets"]:
-        results[state["key"]] = state["doc_count"]
+        temp = {
+            "state_code": state["key"],
+            "count": state["doc_count"]
+        }
+        results.append(temp)
     return results
