@@ -23,6 +23,19 @@ const states = [
     'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'
 ];
 
+const state_code = [
+    'AL', 'AK', 'AZ', 'AR', 'CA', 'CO',
+    'CT', 'DE', 'FL', 'GA', 'HI', 'ID',
+    'IL', 'IN', 'IA', 'KS', 'KY', 'LA',
+    'ME', 'MD', 'MA', 'MI', 'MN',
+    'MS', 'MO', 'MT', 'NE', 'NV',
+    'NH', 'NJ', 'NM', 'NY',
+    'NC', 'ND', 'OH', 'OK', 'OR',
+    'PA', 'RI', 'SC', 'SD',
+    'TN', 'TX', 'UT', 'VT', 'VA',
+    'WA', 'WV', 'WI', 'WY'
+]
+
 const stringStates = states.toString().toUpperCase();
 
 const style = {
@@ -69,6 +82,9 @@ const ModalWindow = ({selectedState }) => {
         if(state) {
             setOpen(true);
         }
+        // state_code.map((state_code) => {
+        //     console.log(getStateNameByStateCode(state_code))
+        // })
     }, [searchValue, state])
 
     const handleClose = () => {
