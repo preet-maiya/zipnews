@@ -4,7 +4,7 @@ import json
 import datetime
 import traceback
 import requests
-from helpers import get_news_per_state, get_state_news_count
+from helpers import get_news_per_state, get_state_news_count, search_news_in_range
 from validator import valid_date_format, valid_dates
 
 
@@ -35,12 +35,32 @@ def get_news():
         news = get_news_per_state(start_time, end_time, state_code)
         resp = {
             "news": news,
-            "status": "Success"
+            "status": "Success",
+            "size": len(news)
         }
         return make_response(jsonify(resp), 200)
     except Exception as ex:
         traceback.print_exc()
         return make_response(jsonify({"status": "Failure", "message": "Internal Server Error"}), 500)
+
+
+@app.route(f"{base_route}/search", methods=["GET"])
+def search_news():
+    try:
+        start_time = request.args.get("start_time")
+        end_time = request.args.get("end_time")
+        search_phrase = request.args.get("search_phrase")
+        news = search_news_in_range(start_time, end_time, search_phrase)
+        resp = {
+            "news": news,
+            "status": "Success",
+            "size": len(news)
+        }
+        return make_response(jsonify(resp), 200)
+    except Exception as ex:
+        traceback.print_exc()
+        return make_response(jsonify({"status": "Failure", "message": "Internal Server Error"}), 500)
+
 
 @app.route(f"{base_route}/count", methods=["GET"])
 def get_count():
