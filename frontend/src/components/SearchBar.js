@@ -62,12 +62,19 @@ const SearchBar = ({ }) => {
 
     const onSearch = () => {
         // handleSearch(searchValue);
+        console.log(searchValue)
         dispatch(changeSearch(searchValue))
         // Call a function to process the search value here
     };
 
     const onChange = (e) => {
         setSearchValue(e.target.value);
+    }
+
+    const handleKeyPressed = (e) => {
+        if (e.key === 'Enter' && searchValue) {
+            onSearch();
+        }
     }
 
     return (
@@ -83,6 +90,7 @@ const SearchBar = ({ }) => {
                     onChange={(e) => onChange(e)}
                     placeholder="Search…"
                     inputProps={{ 'aria-label': 'search' }}
+                    onKeyDown={handleKeyPressed}
                 />
 
             </Search>

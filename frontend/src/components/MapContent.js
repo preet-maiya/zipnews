@@ -11,6 +11,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { changeState } from '../store/stateSlice';
 import { http } from '../assets/http';
 import info from '../zipnews.postman_collection.json'
+
 import { getStateNameByStateCode } from 'us-state-codes';
 
 const MapContent = ({ heatmap, handleRefresh }) => {
