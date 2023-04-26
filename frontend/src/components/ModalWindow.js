@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Box, Backdrop, Modal, Fade, Button, Typography, IconButton, Stack, Paper, Autocomplete, TextField } from '@mui/material';
 import Divider from '@mui/material/Divider';
 import { LocationOn } from '@mui/icons-material';
+import SearchIcon from '@mui/icons-material/Search';
 import { Close } from '@mui/icons-material';
 import Card from './NewsCard'
 import { changeState } from '../store/stateSlice'
@@ -23,21 +24,6 @@ const states = [
     'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia',
     'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'
 ];
-
-const state_code = [
-    'AL', 'AK', 'AZ', 'AR', 'CA', 'CO',
-    'CT', 'DE', 'FL', 'GA', 'HI', 'ID',
-    'IL', 'IN', 'IA', 'KS', 'KY', 'LA',
-    'ME', 'MD', 'MA', 'MI', 'MN',
-    'MS', 'MO', 'MT', 'NE', 'NV',
-    'NH', 'NJ', 'NM', 'NY',
-    'NC', 'ND', 'OH', 'OK', 'OR',
-    'PA', 'RI', 'SC', 'SD',
-    'TN', 'TX', 'UT', 'VT', 'VA',
-    'WA', 'WV', 'WI', 'WY'
-]
-
-const stringStates = states.toString().toUpperCase();
 
 const style = {
     position: 'absolute',
@@ -86,9 +72,6 @@ const ModalWindow = ({selectedState }) => {
             setOpen(true);
             getNews();
         }
-        // state_code.map((state_code) => {
-        //     console.log(getStateNameByStateCode(state_code))
-        // })
     }, [searchValue, state])
 
     const handleClose = () => {
@@ -110,7 +93,7 @@ const ModalWindow = ({selectedState }) => {
         }}
     >
         <IconButton sx={{ p: '10px' }} aria-label="menu">
-            <LocationOn />
+            {searchValue ? <SearchIcon /> :<LocationOn />}
         </IconButton>
         <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
         <Autocomplete
@@ -150,7 +133,7 @@ const ModalWindow = ({selectedState }) => {
                 <Box sx={style}>
                     <Stack direction="row" justifyContent="space-between">
                         <Typography fontWeight={600} color="#0A4C6A" id="transition-modal-title" sx={{ opacity: '0.5', display: { lg: 'block', xs: 'none' }, fontSize: '24px' }}>
-                            {state}
+                            {searchValue ? "Keyword" : state}
                         </Typography>
                         {AutocompleteComponent}
                         <IconButton onClick={handleClose}>
