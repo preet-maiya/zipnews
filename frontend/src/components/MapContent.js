@@ -3,11 +3,15 @@ import { GeoJSON, useMap, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import { statesData } from "../util/statesData"
 import { Box } from '@mui/material';
+import axios from 'axios';
+
 
 import ModalWindow from './ModalWindow';
 import { useDispatch, useSelector } from 'react-redux';
 import { changeState } from '../store/stateSlice';
 import { http } from '../assets/http';
+import info from '../zipnews.postman_collection.json'
+import { getStateNameByStateCode } from 'us-state-codes';
 
 const MapContent = ({ heatmap, handleRefresh }) => {
     const [open, setOpen] = useState(false);
@@ -21,19 +25,35 @@ const MapContent = ({ heatmap, handleRefresh }) => {
     const searchValue = useSelector((state) => state.searchValue.value)
     const dispatch = useDispatch();
     const [count, setCount] = useState([]);
+    // const date = new Date();
+    // date.setDate(date.getDate() - 7)
 
-    const getCount = () => {
-        http.get(`/v1/count?date=${''}`).then((res) => {
-            if (res.data) {
-                setCount(res.data.count)
-            }
-        }).catch((err) => {
-            console.log(err)
+    const getCount = async () => {
+        // await http.get(`/v1/count?date=${date.toISOString().slice(0,10)).then((res) => {
+        //     if (res.data) {
+        //         setCount(res.data.count)
+                // const fetchedData = res.data.count
+                // await fetchedData.map(function(data) {
+                //     data.state = getStateNameByStateCode(data.state)
+                //     return data
+                // })
+                // setCount(data)
+        //     }
+        // }).catch((err) => {
+        //     console.log(err)
+        // })
+        const data = await JSON.parse(info.item[1].response[0].body)
+        await data.map(function(data) {
+            data.state = getStateNameByStateCode(data.state)
+            return data
         })
+        setCount(data)
     }
-    // useEffect(() => {
-    //      getCount()
-    // }, []);
+
+    useEffect(() => {
+        // console.log(date.toISOString().slice(0,10))
+        getCount()
+    }, []);
 
     const styles = (f) => {
         return {

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Box, Backdrop, Modal, Fade, Button, Typography, IconButton, Stack, Paper, Autocomplete, TextField } from '@mui/material';
 import Divider from '@mui/material/Divider';
 import { LocationOn } from '@mui/icons-material';
+import SearchIcon from '@mui/icons-material/Search';
 import { Close } from '@mui/icons-material';
 import Card from './NewsCard'
 import { changeState } from '../store/stateSlice'
@@ -9,6 +10,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { changeSearch } from '../store/searchSlice';
 import {http} from '../assets/http'
 import { getStateCodeByStateName, getStateNameByStateCode, sanitizeStateCode, sanitizeStateName } from 'us-state-codes';
+import data from '../zipnews.postman_collection.json'
 
 const states = [
     'Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado',
@@ -22,8 +24,6 @@ const states = [
     'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia',
     'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'
 ];
-
-const stringStates = states.toString().toUpperCase();
 
 const style = {
     position: 'absolute',
@@ -51,13 +51,15 @@ const ModalWindow = ({selectedState }) => {
     const dispatch = useDispatch();
 
     const getNews = () => {
-        http.get(`/v1/news?start_time=${''}&end_time=${''}&state_code=${getStateCodeByStateName(state)}`).then((res) => {
-            if(res.data.success) {
-                setNews([...news, ...res.data.news])
-            }
-        }).catch((err) => {
-            console.log(err)
-        })
+        // http.get(`/v1/news?start_time=${''}&end_time=${''}&state_code=${getStateCodeByStateName(state)}`).then((res) => {
+        //     if(res.data.success) {
+        //         setNews([...news, ...res.data.news])
+        //     }
+        // }).catch((err) => {
+        //     console.log(err)
+        // })
+        setNews(JSON.parse(data.item[0].response[0].body).news)
+        console.log(JSON.parse(data.item[0].response[0].body).news)
     }
 
     useEffect(() => {
@@ -68,6 +70,7 @@ const ModalWindow = ({selectedState }) => {
 
         if(state) {
             setOpen(true);
+            getNews();
         }
     }, [searchValue, state])
 
@@ -90,7 +93,7 @@ const ModalWindow = ({selectedState }) => {
         }}
     >
         <IconButton sx={{ p: '10px' }} aria-label="menu">
-            <LocationOn />
+            {searchValue ? <SearchIcon /> :<LocationOn />}
         </IconButton>
         <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
         <Autocomplete
@@ -130,7 +133,7 @@ const ModalWindow = ({selectedState }) => {
                 <Box sx={style}>
                     <Stack direction="row" justifyContent="space-between">
                         <Typography fontWeight={600} color="#0A4C6A" id="transition-modal-title" sx={{ opacity: '0.5', display: { lg: 'block', xs: 'none' }, fontSize: '24px' }}>
-                            {state}
+                            {searchValue ? "Keyword" : state}
                         </Typography>
                         {AutocompleteComponent}
                         <IconButton onClick={handleClose}>
@@ -141,14 +144,18 @@ const ModalWindow = ({selectedState }) => {
                         <Typography width="15%">
                             Some filters
                         </Typography>
-                        <Stack direction="row" sx={{ gap: { xl: '10px', lg: '5px', xs: '2px' } }} flexWrap="wrap" justifyContent="flex-end">
+                        {news.length > 0 ? <Stack direction="row" sx={{ gap: { xl: '10px', lg: '5px', xs: '2px' } }} flexWrap="wrap" justifyContent="flex-end">
+                            {/* <Card />
                             <Card />
                             <Card />
                             <Card />
                             <Card />
-                            <Card />
-                            <Card />
-                        </Stack>
+                            <Card /> */}
+                            {news.map((news, index) => {
+                                return <Card props={news} key={index} />
+                            })}
+
+                        </Stack> : ''}
                     </Stack>
                 </Box>
             </Fade>
