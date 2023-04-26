@@ -29,31 +29,31 @@ const MapContent = ({ heatmap, handleRefresh }) => {
     // date.setDate(date.getDate() - 7)
 
     const getCount = async () => {
-        // http.get(`/v1/count?date=${'2023-01-10'}`).then((res) => {
+        // await http.get(`/v1/count?date=${date.toISOString().slice(0,10)).then((res) => {
         //     if (res.data) {
         //         setCount(res.data.count)
+                // const fetchedData = res.data.count
+                // await fetchedData.map(function(data) {
+                //     data.state = getStateNameByStateCode(data.state)
+                //     return data
+                // })
+                // setCount(data)
         //     }
         // }).catch((err) => {
         //     console.log(err)
         // })
-        // axios.get('../../../zipnews.postman_collection.json').then((res) => {
-        //     console.log(res.data)
-        // })
-        await setCount(JSON.parse(info.item[1].response[0].body))
+        const data = await JSON.parse(info.item[1].response[0].body)
+        await data.map(function(data) {
+            data.state = getStateNameByStateCode(data.state)
+            return data
+        })
+        setCount(data)
     }
 
     useEffect(() => {
         // console.log(date.toISOString().slice(0,10))
-        console.log(count)
-        if(count.length == 0) getCount()
-        else {
-            count.map(function(data) {
-                data.state = getStateNameByStateCode(data.state)
-                return data
-            })
-        }
-        
-    }, [count]);
+        getCount()
+    }, []);
 
     const styles = (f) => {
         return {
