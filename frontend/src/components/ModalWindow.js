@@ -64,13 +64,17 @@ const ModalWindow = ({selectedState }) => {
 
     useEffect(() => {
         if (searchValue) {
-            dispatch(changeState(searchValue))
+            if(states.includes(sanitizeStateName(searchValue))) {
+                console.log('here')
+                dispatch(changeState(searchValue))
+            }
+            getNews()
             setOpen(true);
+            // dispatch(changeState(searchValue))
         }
-
         if(state) {
-            setOpen(true);
             getNews();
+            setOpen(true);
         }
     }, [searchValue, state])
 
@@ -99,7 +103,7 @@ const ModalWindow = ({selectedState }) => {
         <Autocomplete
             width="200px"
             options={states}
-            value={state}
+            value={state ? state : searchValue}
             onChange={handleSelect}
             clearIcon={null}
             renderInput={(params) => (
