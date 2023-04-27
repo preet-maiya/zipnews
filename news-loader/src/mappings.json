@@ -2,7 +2,8 @@
     "mappings": {
         "properties": {
             "published_time": {
-                "type": "date"
+                "type": "date",
+                "format": "yyyy-MM-dd HH:mm:ss"
             },
             "url": {
                 "type": "text"
@@ -20,7 +21,7 @@
                 "type": "text"
             },
             "state_code": {
-                "type": "text"
+                "type": "keyword"
             },
             "contextual_text": {
                 "type": "text"

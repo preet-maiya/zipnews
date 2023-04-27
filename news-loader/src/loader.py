@@ -4,10 +4,14 @@ import uuid
 import os
 import pandas as pd
 import argparse
+import traceback
 
 import elasticsearch
 from google.cloud import bigquery
 from google.oauth2 import service_account
+
+import config
+from elasticsearch.helpers import scan
 
 logging.basicConfig(level=logging.NOTSET)
 
@@ -19,7 +23,7 @@ parser.add_argument("--end-date", type=str,
 
 args = parser.parse_args()
 
-LOAD_FROM_BQ = True if os.environ.get("LOAD_FROM_BQ", 0) else False
+LOAD_FROM_BQ = True if int(os.environ.get("LOAD_FROM_BQ", 0)) else False
 LOCAL_DATASET = os.environ.get("LOCAL_DATASET", "dataset")
 SERVICE_ACCOUNT_FILE = os.environ.get("SERVICE_ACCOUNT_FILE", "/tmp/gcloud-iam.json")
 
@@ -28,7 +32,41 @@ credentials = service_account.Credentials.from_service_account_file(SERVICE_ACCO
 # Construct a BigQuery client object.
 client = bigquery.Client(credentials=credentials)
 
-es = elasticsearch.Elasticsearch(hosts="http://localhost:9200")
+class ElasticClient(object):
+    def __init__(self, hosts=[config.ES_CONNECTION_STRING], **kwargs):
+        self.client = elasticsearch.Elasticsearch(hosts, ca_certs=config.ES_CERT_PATH,
+                    basic_auth=(config.ES_USER, config.ES_PASSWORD), verify_certs=False)
+    
+    def search(self, index_name, search_query, **kwargs):
+        try:
+            resp = self.client.search(index=index_name, body=search_query, **kwargs)
+            return resp
+        except Exception as ex:
+            traceback.print_exc()
+    def scan_search(self, index_name, search_query, **kwargs):
+        try:
+            resp = scan(self.client, query=search_query, index=index_name, **kwargs)
+            return resp
+        except Exception as ex:
+            traceback.print_exc()
+    def create_index(self, index_name, mappings, **kwargs):
+        try:
+            resp = self.client.indices.create(index=index_name, body=mappings, **kwargs)
+            return resp
+        except Exception as ex:
+            traceback.print_exc()
+    def bulk_update(self, operations, **kwargs):
+        try:
+            resp = self.client.bulk(operations=operations)
+            return resp
+        except Exception as ex:
+            traceback.print_exc()
+
+try:
+    es = ElasticClient()
+except Exception as ex:
+    traceback.print_exc()
+    print("Failed to connect to elasticsearch")
 
 INDEX_NAME = "news"
 
@@ -71,7 +109,7 @@ def get_bq_data(client, start_date, end_date, limit=None):
           "ContextualText": "contextual_text",
       }
   )
-  df["published_time"] = df["published_time"].dt.strftime("%Y-%m-%dT%H:%M:%SZ")
+  df["published_time"] = df["published_time"].dt.strftime("%Y-%m-%d %H:%M:%S")
   return df
 
 
@@ -94,10 +132,10 @@ def bulk_update(index_name, df):
       mappings = json.load(f)
 
   logging.info(f"Trying to create index {index_name}")
-  es.indices.create(index=index_name, ignore=[400], body=mappings)
+  es.create_index(index_name=index_name, mappings=mappings, ignore=[400])
 
   logging.info(f"Indexing {df.shape[0]} news")
-  es.bulk(operations=generate_dataset(df, INDEX_NAME))
+  es.bulk_update(operations=generate_dataset(df, INDEX_NAME))
 
 
 if LOAD_FROM_BQ:
@@ -107,6 +145,7 @@ else:
   dataset = pd.read_csv(LOCAL_DATASET)
   dataset['published_time'] = pd.to_datetime(dataset['published_time'])
   dataset = dataset[(dataset['published_time']>=args.start_date) & (dataset['published_time']<=args.end_date)]
+  dataset["published_time"] = dataset["published_time"].dt.strftime("%Y-%m-%d %H:%M:%S")
 
 
 dataset.to_csv("news_mar_2023.csv")
