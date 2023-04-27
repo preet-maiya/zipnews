@@ -6,7 +6,7 @@ APP_NAME = "zipnews"
 
 API_VERSION = "/v1"
 
-ES_INDEX_NAME = "news-q1"
+ES_INDEX_NAME = "news"
 
 NEWS_COUNT = 10
 
