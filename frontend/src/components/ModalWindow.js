@@ -38,7 +38,22 @@ const style = {
     border: '2px solid white',
     p: 2,
     outline: 'none',
+    overflow: 'hidden',
+    overflowY: 'scroll',
 };
+
+const grid = {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
+    gridGap: '1rem',
+    padding: '1rem',
+    margin: '1rem',
+    width: '100%',
+    height: '100%',
+    overflow: 'hidden',
+    overflowY: 'scroll',
+    
+}
 
 
 
@@ -65,8 +80,7 @@ const ModalWindow = ({selectedState }) => {
     useEffect(() => {
         if (searchValue) {
             if(states.includes(sanitizeStateName(searchValue))) {
-                console.log('here')
-                dispatch(changeState(searchValue))
+                dispatch(changeState(sanitizeStateName(searchValue)))
             }
             getNews()
             setOpen(true);
@@ -148,18 +162,15 @@ const ModalWindow = ({selectedState }) => {
                         <Typography width="15%">
                             Some filters
                         </Typography>
-                        {news.length > 0 ? <Stack direction="row" sx={{ gap: { xl: '10px', lg: '5px', xs: '2px' } }} flexWrap="wrap" justifyContent="flex-end">
-                            {/* <Card />
-                            <Card />
-                            <Card />
-                            <Card />
-                            <Card />
-                            <Card /> */}
+                        <div className='grid'>
+
+                        </div>
+                        {news.length > 0 ? <Stack direction="row" sx={{ gap: { xl: '10px', lg: '5px', xs: '2px' } }} flexWrap="wrap" justifyContent="flex-end" alignItems="stretch">
                             {news.map((news, index) => {
                                 return <Card props={news} key={index} />
                             })}
 
-                        </Stack> : ''}
+                        </Stack> : 'There are no news.'}
                     </Stack>
                 </Box>
             </Fade>

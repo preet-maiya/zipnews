@@ -27,8 +27,10 @@ export default function NewsCard(props) {
         <Link to={news.url} target='_blank' style={{ textDecoration: 'none' }}>
             <Card sx={{
                 display: 'flex', width: { lg: '450px', sm: '300px' },
-                height: { lg: '125px', sm: '30px' },
+                // height: { lg: '125px', sm: '30px' },
+                height: '100%',
                 justifyContent: 'space-between',
+                alignItems: 'stretch',
                 ':hover': {
                     backgroundColor: '#D5EEEF',
                     boxShadow: '0px 0px 5px 1px rgba(0,0,0,0.2)',
@@ -48,7 +50,7 @@ export default function NewsCard(props) {
                             Published On: {news.pub_time}
                         </Typography>
                         <Typography fontSize="13px" fontWeight="bold">
-                            Read card to read at source
+                            Click card to read at source
                         </Typography>
                         {/* <Typography variant="subtitle1" color="text.secondary" component="div" fontSize="10px">
                             determining between right now the first option is the nfl essentially cancels the game or
