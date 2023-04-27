@@ -36,7 +36,6 @@ const style = {
     borderRadius: '15px',
     boxShadow: 0,
     border: '2px solid white',
-    p: 2,
     outline: 'none',
     overflow: 'hidden',
     overflowY: 'scroll',
@@ -53,6 +52,15 @@ const grid = {
     overflow: 'hidden',
     overflowY: 'scroll',
     
+}
+
+const header = {
+    position: 'sticky',
+    top: '0',
+    zIndex: '1',
+    backdropFilter: 'blur(20px)',
+    WebkitBackdropFilter: 'blur(20px)', /* Safari */
+    padding: '10px',
 }
 
 
@@ -73,7 +81,7 @@ const ModalWindow = ({selectedState }) => {
         // }).catch((err) => {
         //     console.log(err)
         // })
-        setNews(JSON.parse(data.item[0].response[0].body).news)
+        setNews([...JSON.parse(data.item[0].response[0].body).news, ...JSON.parse(data.item[0].response[0].body).news])
         console.log(JSON.parse(data.item[0].response[0].body).news)
     }
 
@@ -149,22 +157,19 @@ const ModalWindow = ({selectedState }) => {
         >
             <Fade in={open}>
                 <Box sx={style}>
-                    <Stack direction="row" justifyContent="space-between">
+                    <Stack direction="row" justifyContent="space-between" style={header}>
                         <Typography fontWeight={600} color="#0A4C6A" id="transition-modal-title" sx={{ opacity: '0.5', display: { lg: 'block', xs: 'none' }, fontSize: '24px' }}>
-                            {searchValue ? "Keyword" : state}
+                            {(searchValue && !state) ? "Keyword" : 'State'}
                         </Typography>
                         {AutocompleteComponent}
                         <IconButton onClick={handleClose}>
                             <Close />
                         </IconButton>
                     </Stack>
-                    <Stack direction="row" justifyContent="space-around" mt={2}>
+                    <Stack direction="row" justifyContent="space-around" mt={2} padding='0 10px 10px 10px'>
                         <Typography width="15%">
                             Some filters
                         </Typography>
-                        <div className='grid'>
-
-                        </div>
                         {news.length > 0 ? <Stack direction="row" sx={{ gap: { xl: '10px', lg: '5px', xs: '2px' } }} flexWrap="wrap" justifyContent="flex-end" alignItems="stretch">
                             {news.map((news, index) => {
                                 return <Card props={news} key={index} />
