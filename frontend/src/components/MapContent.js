@@ -44,11 +44,13 @@ const MapContent = ({ heatmap, handleRefresh }) => {
         //     console.log(err)
         // })
         const data = await JSON.parse(info.item[1].response[0].body)
+        console.log(data)
         await data.map(function(data) {
             data.state = getStateNameByStateCode(data.state)
             return data
         })
         setCount(data)
+        console.log(data)
     }
 
     useEffect(() => {
@@ -57,9 +59,10 @@ const MapContent = ({ heatmap, handleRefresh }) => {
     }, []);
 
     const styles = (f) => {
+        const found = count.find(state => state.state == f.properties.name)
         return {
             color: '#666',
-            fillColor: mapPolygonColorToDensity(f.properties.density),
+            fillColor: mapPolygonColorToDensity(found.count),
             fillOpacity: 0.8,
             weight: 1,
             dashArray: '3'
@@ -120,15 +123,15 @@ const MapContent = ({ heatmap, handleRefresh }) => {
         if (!heatmap) {
             return '#7EAFB4'
         }
-        return density > 1000
+        return density > 25
             ? '#0A4C6A'
-            : density > 500
+            : density > 20
                 ? '#166386'
-                : density > 200
+                : density > 15
                     ? '#267C93'
-                    : density > 100
+                    : density > 10
                         ? '#38929D'
-                        : density > 25
+                        : density > 5
                             ? '#4AA4A7'
                             : '#5FC5C5';
     })
@@ -149,13 +152,13 @@ const MapContent = ({ heatmap, handleRefresh }) => {
     // );
     return (
         <Box>
-            <GeoJSON
+            {count.length > 0 ? <GeoJSON
                 data={statesData}
                 key='usa-states'
                 ref={geoJson}
                 style={styles}
                 onEachFeature={handleOnEachFeatures}
-            />
+            /> : 'loading'}
             {/* {legend} */}
             <ModalWindow open={open} handleClose={handleClose} selectedState={state} />
         </Box>
