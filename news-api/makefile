@@ -26,3 +26,6 @@ deploy:
 delete:
 	kubectl delete deploy/zipnews-api
 	kubectl delete service/zipnews-api-svc
+
+port-forward:
+	kubectl port-forward service/zipnews-api-svc 5005
