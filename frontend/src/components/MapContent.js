@@ -28,7 +28,7 @@ const MapContent = ({ heatmap, handleRefresh }) => {
     const [count, setCount] = useState([]);
 
     const getCount = async () => {
-        const formattedDate = new Date(date).toISOString().replace('T', ' ').replace(/\.\d+\w+/g, '');
+        const formattedDate = new Date(date).toISOString().slice(0,10);
         // await http.get(`/v1/count?date=${formattedDate).then((res) => {
         //     if (res.data.success) {
                 // const fetchedData = res.data.count
@@ -53,7 +53,7 @@ const MapContent = ({ heatmap, handleRefresh }) => {
     useEffect(() => {
         // console.log(date.toISOString().slice(0,10))
         getCount()
-    }, []);
+    }, [date]);
 
     const styles = (f) => {
         const found = count.find(state => state.state == f.properties.name)

@@ -75,8 +75,8 @@ const ModalWindow = ({selectedState }) => {
     const date = useSelector((state) => state.date.value)
 
     const getNews = () => {
-        const formattedDate = new Date(date).toISOString().slice(0,10);
-        console.log(formattedDate)
+        const formattedDate = new Date(date).toISOString().replace('T', ' ').replace(/\.\d+\w+/g, '');
+        console.log('news date',formattedDate)
         // http.get(`/v1/news?start_time=${formattedDate}&end_time=${formattedDate}&state_code=${getStateCodeByStateName(state)}`).then((res) => {
         //     if(res.data.success) {
         //         setNews([...news, ...res.data.news])
