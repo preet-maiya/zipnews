@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FormControl, FormControlLabel, Switch, Stack, IconButton, InputAdornment, Box } from '@mui/material';
 import ArrowRightAltRoundedIcon from '@mui/icons-material/ArrowRightAltRounded';
 import { LocalizationProvider } from '@mui/x-date-pickers';
@@ -8,20 +8,31 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import Logo from '../assets/zipnews-low-resolution-logo-color-on-transparent-background.png'
 
 import dayjs, { Dayjs } from 'dayjs';
-
+import { useDispatch, useSelector } from 'react-redux';
+import { changeDate } from '../store/dateSlice';
 
 const Navbar = ({ heatmapSelection }) => {
-    const [selectedDate, setSelectedDate] = useState(dayjs('2023-04-24'));;
+    const date = useSelector((state) => state.date.value)
+    const [selectedDate, setSelectedDate] = useState(new dayjs());
+    const dispatch = useDispatch()
     const handleDateChange = (e) => {
         setSelectedDate(e);
     };
     const handleDateSubmit = () => {
         if (selectedDate) {
-
-            console.log(selectedDate.$d);
+            dispatch(changeDate(Date(selectedDate.$d)))
         }
         // Add your date submission logic here
     };
+
+    useEffect(() => {
+        // console.log(selectedDate)
+        const temp = new dayjs(date)
+        const newDate = temp.subtract(7, 'days');
+        dispatch(changeDate(Date(newDate.$d)));
+        console.log(date)
+        setSelectedDate(newDate)
+    }, [])
 
 
 
@@ -53,8 +64,8 @@ const Navbar = ({ heatmapSelection }) => {
                         maxDate={dayjs('2023-04-28')}
                     />
                 </LocalizationProvider>
-                <IconButton>
-                    <ArrowRightAltRoundedIcon onClick={handleDateSubmit} />
+                <IconButton onClick={handleDateSubmit}>
+                    <ArrowRightAltRoundedIcon  />
                 </IconButton>
             </Box>
             <SearchBar />
