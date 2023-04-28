@@ -1,4 +1,5 @@
 import config
+import traceback
 from datetime import datetime, timedelta
 
 def valid_date_format(date):
@@ -7,6 +8,7 @@ def valid_date_format(date):
         return True, None
     except ValueError:
         print("Invalid dates")
+        traceback.print_exc()
         return False, {"status": "Failure", "message": "Invalid date format"}
 
 def valid_dates(start_date, end_date, state_code):
