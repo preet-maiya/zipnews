@@ -34,7 +34,7 @@ const Navbar = ({ heatmapSelection }) => {
         // const newDate = temp.subtract(7, 'days');
         setSelectedDate(temp)
         setMinDate(temp.subtract(1, 'month'));
-    }, [])
+    }, [date])
 
 
 
