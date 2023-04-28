@@ -18,7 +18,7 @@ const MapContent = ({ heatmap, handleRefresh }) => {
     const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
-
+    const date = useSelector((state) => state.date.value)
 
     const geoJson = useRef(null);
     const map = useMap();
@@ -26,13 +26,10 @@ const MapContent = ({ heatmap, handleRefresh }) => {
     const searchValue = useSelector((state) => state.searchValue.value)
     const dispatch = useDispatch();
     const [count, setCount] = useState([]);
-    // const date = new Date();
-    // date.setDate(date.getDate() - 7)
 
     const getCount = async () => {
         // await http.get(`/v1/count?date=${date.toISOString().slice(0,10)).then((res) => {
-        //     if (res.data) {
-        //         setCount(res.data.count)
+        //     if (res.data.success) {
                 // const fetchedData = res.data.count
                 // await fetchedData.map(function(data) {
                 //     data.state = getStateNameByStateCode(data.state)
@@ -44,13 +41,11 @@ const MapContent = ({ heatmap, handleRefresh }) => {
         //     console.log(err)
         // })
         const data = await JSON.parse(info.item[1].response[0].body)
-        console.log(data)
         await data.map(function(data) {
             data.state = getStateNameByStateCode(data.state)
             return data
         })
         setCount(data)
-        console.log(data)
     }
 
     useEffect(() => {

@@ -72,9 +72,10 @@ const ModalWindow = ({selectedState }) => {
     const state = useSelector((state) =>  state.currentState.value)
     const searchValue = useSelector((state) => state.searchValue.value)
     const dispatch = useDispatch();
+    const date = useSelector((state) => state.date.value)
 
     const getNews = () => {
-        // http.get(`/v1/news?start_time=${''}&end_time=${''}&state_code=${getStateCodeByStateName(state)}`).then((res) => {
+        // http.get(`/v1/news?start_time=${date}&end_time=${date}&state_code=${getStateCodeByStateName(state)}`).then((res) => {
         //     if(res.data.success) {
         //         setNews([...news, ...res.data.news])
         //     }
