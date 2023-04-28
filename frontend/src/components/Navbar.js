@@ -31,10 +31,9 @@ const Navbar = ({ heatmapSelection }) => {
     useEffect(() => {
         // console.log(selectedDate)
         const temp = new dayjs(date)
-        const newDate = temp.subtract(7, 'days');
-        dispatch(changeDate(Date(newDate.$d)));
-        setSelectedDate(new dayjs())
-        setMinDate(newDate.subtract(1, 'month'));
+        // const newDate = temp.subtract(7, 'days');
+        setSelectedDate(temp)
+        setMinDate(temp.subtract(1, 'month'));
     }, [])
 
 

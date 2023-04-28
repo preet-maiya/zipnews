@@ -28,8 +28,7 @@ const MapContent = ({ heatmap, handleRefresh }) => {
     const [count, setCount] = useState([]);
 
     const getCount = async () => {
-        const formattedDate = new Date(date).toISOString().replace('T', ' ').replace(/\.000Z$/, '');
-        console.log(formattedDate)
+        const formattedDate = new Date(date).toISOString().replace('T', ' ').replace(/\.\d+\w+/g, '');
         // await http.get(`/v1/count?date=${formattedDate).then((res) => {
         //     if (res.data.success) {
                 // const fetchedData = res.data.count
