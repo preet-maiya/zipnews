@@ -28,7 +28,9 @@ const MapContent = ({ heatmap, handleRefresh }) => {
     const [count, setCount] = useState([]);
 
     const getCount = async () => {
-        // await http.get(`/v1/count?date=${date.toISOString().slice(0,10)).then((res) => {
+        const formattedDate = new Date(date).toISOString().replace('T', ' ').replace(/\.000Z$/, '');
+        console.log(formattedDate)
+        // await http.get(`/v1/count?date=${formattedDate).then((res) => {
         //     if (res.data.success) {
                 // const fetchedData = res.data.count
                 // await fetchedData.map(function(data) {
@@ -40,6 +42,7 @@ const MapContent = ({ heatmap, handleRefresh }) => {
         // }).catch((err) => {
         //     console.log(err)
         // })
+        
         const data = await JSON.parse(info.item[1].response[0].body)
         await data.map(function(data) {
             data.state = getStateNameByStateCode(data.state)

@@ -75,7 +75,9 @@ const ModalWindow = ({selectedState }) => {
     const date = useSelector((state) => state.date.value)
 
     const getNews = () => {
-        // http.get(`/v1/news?start_time=${date}&end_time=${date}&state_code=${getStateCodeByStateName(state)}`).then((res) => {
+        const formattedDate = new Date(date).toISOString().slice(0,10);
+        console.log(formattedDate)
+        // http.get(`/v1/news?start_time=${formattedDate}&end_time=${formattedDate}&state_code=${getStateCodeByStateName(state)}`).then((res) => {
         //     if(res.data.success) {
         //         setNews([...news, ...res.data.news])
         //     }
@@ -83,7 +85,7 @@ const ModalWindow = ({selectedState }) => {
         //     console.log(err)
         // })
         setNews([...JSON.parse(data.item[0].response[0].body).news, ...JSON.parse(data.item[0].response[0].body).news])
-        console.log(JSON.parse(data.item[0].response[0].body).news)
+        // console.log(JSON.parse(data.item[0].response[0].body).news)
     }
 
     useEffect(() => {

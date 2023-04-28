@@ -20,7 +20,7 @@ export default function NewsCard(props) {
     // }
 
     React.useEffect(() => {
-        console.log(news)
+        // console.log(news)
     }, [])
 
     return (
