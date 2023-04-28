@@ -14,7 +14,9 @@ import { changeDate } from '../store/dateSlice';
 const Navbar = ({ heatmapSelection }) => {
     const date = useSelector((state) => state.date.value)
     const [selectedDate, setSelectedDate] = useState(new dayjs());
+    const [minDate, setMinDate] = useState();
     const dispatch = useDispatch()
+
     const handleDateChange = (e) => {
         setSelectedDate(e);
     };
@@ -25,13 +27,14 @@ const Navbar = ({ heatmapSelection }) => {
         // Add your date submission logic here
     };
 
+
     useEffect(() => {
         // console.log(selectedDate)
         const temp = new dayjs(date)
         const newDate = temp.subtract(7, 'days');
         dispatch(changeDate(Date(newDate.$d)));
-        console.log(date)
         setSelectedDate(newDate)
+        setMinDate(newDate.subtract(1, 'month'));
     }, [])
 
 
@@ -60,8 +63,8 @@ const Navbar = ({ heatmapSelection }) => {
                         value={selectedDate}
                         onChange={handleDateChange}
 
-                        minDate={dayjs('2022-05-01')}
-                        maxDate={dayjs('2023-04-28')}
+                        minDate={dayjs(minDate)}
+                        maxDate={dayjs(selectedDate)}
                     />
                 </LocalizationProvider>
                 <IconButton onClick={handleDateSubmit}>
