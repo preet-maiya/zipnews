@@ -22,7 +22,9 @@ const Navbar = ({ heatmapSelection }) => {
     };
     const handleDateSubmit = () => {
         if (selectedDate) {
-            dispatch(changeDate(Date(selectedDate.$d)))
+            const date = new Date(selectedDate.$d)
+            console.log(date)
+            dispatch(changeDate(date.toISOString()))
         }
         // Add your date submission logic here
     };
@@ -31,9 +33,9 @@ const Navbar = ({ heatmapSelection }) => {
     useEffect(() => {
         // console.log(selectedDate)
         const temp = new dayjs(date)
-        const newDate = new dayjs().subtract(7, 'days');
+        // const newDate = new dayjs().subtract(28, 'days');
         setSelectedDate(temp)
-        setMinDate(newDate.subtract(1, 'month'));
+        // setMinDate(newDate.subtract(1, 'month'));
     }, [date])
 
 
@@ -61,9 +63,11 @@ const Navbar = ({ heatmapSelection }) => {
                     }}
                         value={selectedDate}
                         onChange={handleDateChange}
+                        minDate={dayjs('2023-01-01')}
+                        maxDate={dayjs('2023-01-31')}
 
-                        minDate={dayjs(minDate)}
-                        maxDate={dayjs(selectedDate)}
+                        // minDate={dayjs(minDate)}
+                        // maxDate={dayjs(selectedDate)}
                     />
                 </LocalizationProvider>
                 <IconButton onClick={handleDateSubmit}>
