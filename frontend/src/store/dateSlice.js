@@ -6,8 +6,9 @@ import {Dayjs} from 'dayjs'
 export const dateSlice = createSlice({
   name: 'date',
   initialState: {
+    value: new Date(Date.now() - (7 * 24 * 60 * 60 * 1000)),
     // value: new Date(Date.now() - (16.7 * 7 * 24 * 60 * 60 * 1000)),
-    value: new Date('2023-01-1')
+    // value: new Date('2023-01-1')
   },
   reducers: {
     // state

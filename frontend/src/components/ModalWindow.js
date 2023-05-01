@@ -75,16 +75,36 @@ const ModalWindow = ({selectedState }) => {
     const date = useSelector((state) => state.date.value)
 
     const getNews = () => {
-        const formattedDate = new Date(date).toISOString().replace('T', ' ').replace(/\.\d+\w+/g, '');
+        const formattedDate = new Date(date).toISOString().slice(0,10);
+        const startTime = formattedDate + " 00:00:00"
+        const endTime = formattedDate + " 23:59:59"
         console.log('news date',formattedDate)
-        // http.get(`/v1/news?start_time=${formattedDate}&end_time=${formattedDate}&state_code=${getStateCodeByStateName(state)}`).then((res) => {
-        //     if(res.data.success) {
-        //         setNews([...news, ...res.data.news])
-        //     }
-        // }).catch((err) => {
-        //     console.log(err)
-        // })
-        setNews([...JSON.parse(data.item[0].response[0].body).news, ...JSON.parse(data.item[0].response[0].body).news])
+        http.get(`/v1/news?start_time=${startTime}&end_time=${endTime}&state_code=${getStateCodeByStateName(state)}`).then((res) => {
+            if(res.status === 200) {
+                // setNews([...news, ...res.data.news])
+                setNews([...res.data.news])
+            }
+        }).catch((err) => {
+            console.log(err)
+        })
+        // setNews([...JSON.parse(data.item[0].response[0].body).news, ...JSON.parse(data.item[0].response[0].body).news])
+        // console.log(JSON.parse(data.item[0].response[0].body).news)
+    }
+
+    const getSearch = () => {
+        const formattedDate = new Date(date).toISOString().slice(0,10);
+        const startTime = formattedDate + " 00:00:00"
+        const endTime = formattedDate + " 23:59:59"
+        console.log('news date',formattedDate)
+        http.get(`/v1/search?start_time=${startTime}&end_time=${endTime}&search_phrase=${searchValue}`).then((res) => {
+            if(res.status === 200) {
+                // setNews([...news, ...res.data.news])
+                setNews([...res.data.news])
+            }
+        }).catch((err) => {
+            console.log(err)
+        })
+        // setNews([...JSON.parse(data.item[0].response[0].body).news, ...JSON.parse(data.item[0].response[0].body).news])
         // console.log(JSON.parse(data.item[0].response[0].body).news)
     }
 
@@ -93,7 +113,7 @@ const ModalWindow = ({selectedState }) => {
             if(states.includes(sanitizeStateName(searchValue))) {
                 dispatch(changeState(sanitizeStateName(searchValue)))
             }
-            getNews()
+            getSearch()
             setOpen(true);
             // dispatch(changeState(searchValue))
         }
@@ -101,7 +121,7 @@ const ModalWindow = ({selectedState }) => {
             getNews();
             setOpen(true);
         }
-    }, [searchValue, state])
+    }, [searchValue, state, date])
 
     const handleClose = () => {
         setOpen(false);
@@ -113,6 +133,7 @@ const ModalWindow = ({selectedState }) => {
         dispatch(changeSearch(''));
         dispatch(changeState(e.target.innerHTML))
     };
+
     const AutocompleteComponent = (<Paper
         component="form"
         elevation={0}
@@ -125,23 +146,26 @@ const ModalWindow = ({selectedState }) => {
             {searchValue ? <SearchIcon /> :<LocationOn />}
         </IconButton>
         <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
-        <Autocomplete
-            width="200px"
-            options={states}
-            value={state ? state : searchValue}
-            onChange={handleSelect}
-            clearIcon={null}
-            renderInput={(params) => (
-                <TextField {...params} sx={{
-                    '& .MuiOutlinedInput-notchedOutline': {
-                        border: 'none',
-                    },
-                    width: "200px",
-                    alignItems: 'center',
-                }} label="State" variant="outlined" color="success" />
+        {state?     (<Autocomplete
+        width="200px"
+        options={states}
+        value={state ? state : searchValue}
+        onChange={handleSelect}
+        clearIcon={null}
+        renderInput={(params) => (
+            <TextField {...params} sx={{
+                '& .MuiOutlinedInput-notchedOutline': {
+                    border: 'none',
+                },
+                width: "200px",
+                alignItems: 'center',
+            }} variant="outlined" color="success" />
 
-            )}
-        />
+        )}
+    />)
+    :
+    <>{searchValue}</>}
+
     </Paper>)
 
     return (
@@ -169,17 +193,17 @@ const ModalWindow = ({selectedState }) => {
                             <Close />
                         </IconButton>
                     </Stack>
-                    <Stack direction="row" justifyContent="space-around" mt={2} padding='0 10px 10px 10px'>
-                        <Typography width="15%">
+                    {/* <Stack direction="row" justifyContent="space-around" mt={2} padding='0 10px 10px 10px'> */}
+                        {/* <Typography width="15%">
                             Some filters
-                        </Typography>
-                        {news.length > 0 ? <Stack direction="row" sx={{ gap: { xl: '10px', lg: '5px', xs: '2px' } }} flexWrap="wrap" justifyContent="flex-end" alignItems="stretch">
+                        </Typography> */}
+                        {news.length > 0 ? <Stack direction="row" sx={{ gap: { xl: '12px', lg: '7px', xs: '2px' } }} flexWrap="wrap" justifyContent="center" alignItems="stretch">
                             {news.map((news, index) => {
                                 return <Card props={news} key={index} />
                             })}
 
                         </Stack> : 'There are no news.'}
-                    </Stack>
+                    {/* </Stack> */}
                 </Box>
             </Fade>
         </Modal>

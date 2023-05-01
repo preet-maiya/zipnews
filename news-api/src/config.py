@@ -8,7 +8,7 @@ API_VERSION = "/v1"
 
 ES_INDEX_NAME = "news"
 
-NEWS_COUNT = 10
+NEWS_COUNT = 25
 
 DATE_FORMAT = "%Y-%m-%d %H:%M:%S" # 2023-01-01%2000:00:00
 NEWS_WINDOW = 2 # number of days

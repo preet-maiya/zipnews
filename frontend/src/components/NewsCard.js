@@ -62,7 +62,7 @@ export default function NewsCard(props) {
                     component="img"
                     sx={{ width: 100 }}
                     image={news.image_url}
-                    alt="Live from space album cover"
+                    alt="No image found"
                 />
             </Card>
         </Link>

@@ -33,9 +33,9 @@ const Navbar = ({ heatmapSelection }) => {
     useEffect(() => {
         // console.log(selectedDate)
         const temp = new dayjs(date)
-        // const newDate = new dayjs().subtract(28, 'days');
+        const newDate = new dayjs().subtract(7, 'days');
         setSelectedDate(temp)
-        // setMinDate(newDate.subtract(1, 'month'));
+        setMinDate(newDate.subtract(2, 'year'));
     }, [date])
 
 
@@ -63,11 +63,11 @@ const Navbar = ({ heatmapSelection }) => {
                     }}
                         value={selectedDate}
                         onChange={handleDateChange}
-                        minDate={dayjs('2023-01-01')}
-                        maxDate={dayjs('2023-01-31')}
+                        // minDate={dayjs('2023-01-01')}
+                        // maxDate={dayjs('2023-01-31')}
 
-                        // minDate={dayjs(minDate)}
-                        // maxDate={dayjs(selectedDate)}
+                        minDate={dayjs(minDate)}
+                        maxDate={dayjs(selectedDate)}
                     />
                 </LocalizationProvider>
                 <IconButton onClick={handleDateSubmit}>
@@ -78,10 +78,11 @@ const Navbar = ({ heatmapSelection }) => {
             <FormControl component="fieldset">
                 <FormControlLabel
                     value="Heatmap"
-                    control={<Switch color="primary" />}
+                    control={<Switch color="primary" defaultChecked/>}
                     label="Heatmap"
                     labelPlacement="end"
                     onChange={handleSwitch}
+                    
                 />
             </FormControl>
         </Stack>
