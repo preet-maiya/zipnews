@@ -27,10 +27,11 @@ LOAD_FROM_BQ = True if int(os.environ.get("LOAD_FROM_BQ", 0)) else False
 LOCAL_DATASET = os.environ.get("LOCAL_DATASET", "dataset")
 SERVICE_ACCOUNT_FILE = os.environ.get("SERVICE_ACCOUNT_FILE", "/tmp/gcloud-iam.json")
 
-credentials = service_account.Credentials.from_service_account_file(SERVICE_ACCOUNT_FILE)
+if LOAD_FROM_BQ:
+    credentials = service_account.Credentials.from_service_account_file(SERVICE_ACCOUNT_FILE)
 
-# Construct a BigQuery client object.
-client = bigquery.Client(credentials=credentials)
+    # Construct a BigQuery client object.
+    client = bigquery.Client(credentials=credentials)
 
 class ElasticClient(object):
     def __init__(self, hosts=[config.ES_CONNECTION_STRING], **kwargs):
