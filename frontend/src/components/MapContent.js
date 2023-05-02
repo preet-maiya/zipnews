@@ -14,6 +14,7 @@ import info from '../zipnews.postman_collection.json'
 import Loader from './Loader';
 
 import { getStateNameByStateCode } from 'us-state-codes';
+import dayjs from 'dayjs';
 
 const MapContent = ({ heatmap, handleRefresh }) => {
     const [open, setOpen] = useState(false);
@@ -29,7 +30,8 @@ const MapContent = ({ heatmap, handleRefresh }) => {
     const [count, setCount] = useState([]);
 
     const getCount = async () => {
-        const formattedDate = new Date(date).toISOString().slice(0,10);
+        const d = new dayjs(date).subtract(1, 'days')
+        const formattedDate = new Date(d.$d).toISOString().slice(0,10);
         await http.get(`/v1/count?date=${formattedDate}`).then(async (res) => {
             // console.log(res)
             if (res.status === 200) {
@@ -55,7 +57,7 @@ const MapContent = ({ heatmap, handleRefresh }) => {
     }
 
     useEffect(() => {
-        // console.log('here')
+        console.log(date)
         // console.log(date.toISOString().slice(0,10))
         getCount()
     }, [date]);
