@@ -24,7 +24,7 @@ const Navbar = ({ heatmapSelection }) => {
     const handleDateSubmit = () => {
         if (selectedDate) {
             const date = new Date(selectedDate.$d)
-            console.log(date)
+            // console.log(date)
             dispatch(changeDate(date.toISOString()))
         }
         // Add your date submission logic here
