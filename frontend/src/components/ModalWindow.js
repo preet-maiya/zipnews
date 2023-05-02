@@ -36,9 +36,32 @@ const style = {
     borderRadius: '15px',
     boxShadow: 0,
     border: '2px solid white',
-    p: 2,
     outline: 'none',
+    overflow: 'hidden',
+    overflowY: 'scroll',
 };
+
+const grid = {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
+    gridGap: '1rem',
+    padding: '1rem',
+    margin: '1rem',
+    width: '100%',
+    height: '100%',
+    overflow: 'hidden',
+    overflowY: 'scroll',
+    
+}
+
+const header = {
+    position: 'sticky',
+    top: '0',
+    zIndex: '1',
+    backdropFilter: 'blur(20px)',
+    WebkitBackdropFilter: 'blur(20px)', /* Safari */
+    padding: '10px',
+}
 
 
 
@@ -49,30 +72,56 @@ const ModalWindow = ({selectedState }) => {
     const state = useSelector((state) =>  state.currentState.value)
     const searchValue = useSelector((state) => state.searchValue.value)
     const dispatch = useDispatch();
+    const date = useSelector((state) => state.date.value)
 
     const getNews = () => {
-        // http.get(`/v1/news?start_time=${''}&end_time=${''}&state_code=${getStateCodeByStateName(state)}`).then((res) => {
-        //     if(res.data.success) {
-        //         setNews([...news, ...res.data.news])
-        //     }
-        // }).catch((err) => {
-        //     console.log(err)
-        // })
-        setNews(JSON.parse(data.item[0].response[0].body).news)
-        console.log(JSON.parse(data.item[0].response[0].body).news)
+        const formattedDate = new Date(date).toISOString().slice(0,10);
+        const startTime = formattedDate + " 00:00:00"
+        const endTime = formattedDate + " 23:59:59"
+        console.log('news date',formattedDate)
+        http.get(`/v1/news?start_time=${startTime}&end_time=${endTime}&state_code=${getStateCodeByStateName(state)}`).then((res) => {
+            if(res.status === 200) {
+                // setNews([...news, ...res.data.news])
+                setNews([...res.data.news])
+            }
+        }).catch((err) => {
+            console.log(err)
+        })
+        // setNews([...JSON.parse(data.item[0].response[0].body).news, ...JSON.parse(data.item[0].response[0].body).news])
+        // console.log(JSON.parse(data.item[0].response[0].body).news)
+    }
+
+    const getSearch = () => {
+        const formattedDate = new Date(date).toISOString().slice(0,10);
+        const startTime = formattedDate + " 00:00:00"
+        const endTime = formattedDate + " 23:59:59"
+        console.log('news date',formattedDate)
+        http.get(`/v1/search?start_time=${startTime}&end_time=${endTime}&search_phrase=${searchValue}`).then((res) => {
+            if(res.status === 200) {
+                // setNews([...news, ...res.data.news])
+                setNews([...res.data.news])
+            }
+        }).catch((err) => {
+            console.log(err)
+        })
+        // setNews([...JSON.parse(data.item[0].response[0].body).news, ...JSON.parse(data.item[0].response[0].body).news])
+        // console.log(JSON.parse(data.item[0].response[0].body).news)
     }
 
     useEffect(() => {
         if (searchValue) {
-            dispatch(changeState(searchValue))
+            if(states.includes(sanitizeStateName(searchValue))) {
+                dispatch(changeState(sanitizeStateName(searchValue)))
+            }
+            getSearch()
             setOpen(true);
+            // dispatch(changeState(searchValue))
         }
-
         if(state) {
-            setOpen(true);
             getNews();
+            setOpen(true);
         }
-    }, [searchValue, state])
+    }, [searchValue, state, date])
 
     const handleClose = () => {
         setOpen(false);
@@ -84,6 +133,7 @@ const ModalWindow = ({selectedState }) => {
         dispatch(changeSearch(''));
         dispatch(changeState(e.target.innerHTML))
     };
+
     const AutocompleteComponent = (<Paper
         component="form"
         elevation={0}
@@ -96,23 +146,26 @@ const ModalWindow = ({selectedState }) => {
             {searchValue ? <SearchIcon /> :<LocationOn />}
         </IconButton>
         <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
-        <Autocomplete
-            width="200px"
-            options={states}
-            value={state}
-            onChange={handleSelect}
-            clearIcon={null}
-            renderInput={(params) => (
-                <TextField {...params} sx={{
-                    '& .MuiOutlinedInput-notchedOutline': {
-                        border: 'none',
-                    },
-                    width: "200px",
-                    alignItems: 'center',
-                }} label="State" variant="outlined" color="success" />
+        {state?     (<Autocomplete
+        width="200px"
+        options={states}
+        value={state ? state : searchValue}
+        onChange={handleSelect}
+        clearIcon={null}
+        renderInput={(params) => (
+            <TextField {...params} sx={{
+                '& .MuiOutlinedInput-notchedOutline': {
+                    border: 'none',
+                },
+                width: "200px",
+                alignItems: 'center',
+            }} variant="outlined" color="success" />
 
-            )}
-        />
+        )}
+    />)
+    :
+    <>{searchValue}</>}
+
     </Paper>)
 
     return (
@@ -131,32 +184,26 @@ const ModalWindow = ({selectedState }) => {
         >
             <Fade in={open}>
                 <Box sx={style}>
-                    <Stack direction="row" justifyContent="space-between">
+                    <Stack direction="row" justifyContent="space-between" style={header}>
                         <Typography fontWeight={600} color="#0A4C6A" id="transition-modal-title" sx={{ opacity: '0.5', display: { lg: 'block', xs: 'none' }, fontSize: '24px' }}>
-                            {searchValue ? "Keyword" : state}
+                            {(searchValue && !state) ? "Keyword" : 'State'}
                         </Typography>
                         {AutocompleteComponent}
                         <IconButton onClick={handleClose}>
                             <Close />
                         </IconButton>
                     </Stack>
-                    <Stack direction="row" justifyContent="space-around" mt={2}>
-                        <Typography width="15%">
+                    {/* <Stack direction="row" justifyContent="space-around" mt={2} padding='0 10px 10px 10px'> */}
+                        {/* <Typography width="15%">
                             Some filters
-                        </Typography>
-                        {news.length > 0 ? <Stack direction="row" sx={{ gap: { xl: '10px', lg: '5px', xs: '2px' } }} flexWrap="wrap" justifyContent="flex-end">
-                            {/* <Card />
-                            <Card />
-                            <Card />
-                            <Card />
-                            <Card />
-                            <Card /> */}
+                        </Typography> */}
+                        {news.length > 0 ? <Stack direction="row" sx={{ gap: { xl: '12px', lg: '7px', xs: '2px' } }} flexWrap="wrap" justifyContent="center" alignItems="stretch">
                             {news.map((news, index) => {
                                 return <Card props={news} key={index} />
                             })}
 
-                        </Stack> : ''}
-                    </Stack>
+                        </Stack> : 'There are no news.'}
+                    {/* </Stack> */}
                 </Box>
             </Fade>
         </Modal>

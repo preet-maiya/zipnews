@@ -11,13 +11,15 @@ import { useDispatch, useSelector } from 'react-redux';
 import { changeState } from '../store/stateSlice';
 import { http } from '../assets/http';
 import info from '../zipnews.postman_collection.json'
+import Loader from './Loader';
+
 import { getStateNameByStateCode } from 'us-state-codes';
 
 const MapContent = ({ heatmap, handleRefresh }) => {
     const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
-
+    const date = useSelector((state) => state.date.value)
 
     const geoJson = useRef(null);
     const map = useMap();
@@ -25,40 +27,43 @@ const MapContent = ({ heatmap, handleRefresh }) => {
     const searchValue = useSelector((state) => state.searchValue.value)
     const dispatch = useDispatch();
     const [count, setCount] = useState([]);
-    // const date = new Date();
-    // date.setDate(date.getDate() - 7)
 
     const getCount = async () => {
-        // await http.get(`/v1/count?date=${date.toISOString().slice(0,10)).then((res) => {
-        //     if (res.data) {
-        //         setCount(res.data.count)
-                // const fetchedData = res.data.count
-                // await fetchedData.map(function(data) {
-                //     data.state = getStateNameByStateCode(data.state)
-                //     return data
-                // })
-                // setCount(data)
-        //     }
-        // }).catch((err) => {
-        //     console.log(err)
-        // })
-        const data = await JSON.parse(info.item[1].response[0].body)
-        await data.map(function(data) {
-            data.state = getStateNameByStateCode(data.state)
-            return data
+        const formattedDate = new Date(date).toISOString().slice(0,10);
+        await http.get(`/v1/count?date=${formattedDate}`).then((res) => {
+            console.log(res)
+            if (res.status === 200) {
+                const fetchedData = res.data
+                fetchedData.map(function(data) {
+                    data.state = getStateNameByStateCode(data.state_code)
+                    return data
+                })
+                setCount(fetchedData)
+            }
+        }).catch((err) => {
+            console.log(err)
         })
-        setCount(data)
+        
+        // const data = await JSON.parse(info.item[1].response[0].body)
+        // await data.map(function(data) {
+        //     data.state = getStateNameByStateCode(data.state)
+        //     return data
+        // })
+        // setCount(data)
     }
 
     useEffect(() => {
         // console.log(date.toISOString().slice(0,10))
         getCount()
-    }, []);
+    }, [date]);
 
     const styles = (f) => {
+        let found = count.find((state )=>{
+            return state.state == f.properties.name
+        } )
         return {
             color: '#666',
-            fillColor: mapPolygonColorToDensity(f.properties.density),
+            fillColor: mapPolygonColorToDensity(found ? found.count : 100000),
             fillOpacity: 0.8,
             weight: 1,
             dashArray: '3'
@@ -81,6 +86,9 @@ const MapContent = ({ heatmap, handleRefresh }) => {
 
     const highlightFeature = (e) => {
         const layer = e.target;
+        let found = count.find((state )=>{
+            return state.state == e.target.feature.properties.name
+        } )
         layer.setStyle({
             dashArray: '',
             color: '#666',
@@ -88,7 +96,7 @@ const MapContent = ({ heatmap, handleRefresh }) => {
             weight: 5,
             dash: '1',
         });
-        e.target.bindTooltip(e.target.feature.properties.name, {
+        e.target.bindTooltip(`${e.target.feature.properties.name} - ${found? found.count: 0}`, {
             sticky: true,
             offset: [0, -10],
             permanent: true,
@@ -119,15 +127,16 @@ const MapContent = ({ heatmap, handleRefresh }) => {
         if (!heatmap) {
             return '#7EAFB4'
         }
-        return density > 1000
+        if (density > 10000) return '#333'
+        return density > 25
             ? '#0A4C6A'
-            : density > 500
+            : density > 20
                 ? '#166386'
-                : density > 200
+                : density > 15
                     ? '#267C93'
-                    : density > 100
+                    : density > 10
                         ? '#38929D'
-                        : density > 25
+                        : density > 5
                             ? '#4AA4A7'
                             : '#5FC5C5';
     })
@@ -148,13 +157,13 @@ const MapContent = ({ heatmap, handleRefresh }) => {
     // );
     return (
         <Box>
-            <GeoJSON
+            {count.length > 0 ? <GeoJSON
                 data={statesData}
                 key='usa-states'
                 ref={geoJson}
                 style={styles}
                 onEachFeature={handleOnEachFeatures}
-            />
+            /> : <Loader />}
             {/* {legend} */}
             <ModalWindow open={open} handleClose={handleClose} selectedState={state} />
         </Box>
