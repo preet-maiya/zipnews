@@ -15,6 +15,7 @@ const Navbar = ({ heatmapSelection }) => {
     const date = useSelector((state) => state.date.value)
     const [selectedDate, setSelectedDate] = useState(new dayjs());
     const [minDate, setMinDate] = useState();
+    const [maxDate, setMaxDate ] = useState();
     const dispatch = useDispatch()
 
     const handleDateChange = (e) => {
@@ -36,6 +37,7 @@ const Navbar = ({ heatmapSelection }) => {
         const newDate = new dayjs().subtract(7, 'days');
         setSelectedDate(temp)
         setMinDate(newDate.subtract(2, 'year'));
+        setMaxDate(new dayjs())
     }, [date])
 
 
@@ -67,7 +69,7 @@ const Navbar = ({ heatmapSelection }) => {
                         // maxDate={dayjs('2023-01-31')}
 
                         minDate={dayjs(minDate)}
-                        maxDate={dayjs(selectedDate)}
+                        maxDate={dayjs(maxDate)}
                     />
                 </LocalizationProvider>
                 <IconButton onClick={handleDateSubmit}>
