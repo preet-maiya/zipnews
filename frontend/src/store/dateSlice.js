@@ -13,7 +13,7 @@ export const dateSlice = createSlice({
   reducers: {
     // state
     changeDate: (state, action) => {
-      console.log(action.payload)
+      // console.log(action.payload)
         state.value = action.payload;
     },
   },
