@@ -13,6 +13,7 @@ To index data, run these following
 ```bash
 make build-dev
 make deploy
+kubectl create secret generic gcloud-iam
 kubectl exec -it deployment/zipnews-news-loader bash
 ```
 
