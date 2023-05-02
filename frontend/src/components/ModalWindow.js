@@ -92,7 +92,8 @@ const ModalWindow = ({selectedState }) => {
     }
 
     const getSearch = () => {
-        const formattedDate = new Date(date).toISOString().slice(0,10);
+        const d = new dayjs(date).subtract(1, 'days')
+        const formattedDate = new Date(d.$d).toISOString().slice(0,10);
         const startTime = formattedDate + " 00:00:00"
         const endTime = formattedDate + " 23:59:59"
         console.log('news date',formattedDate)
