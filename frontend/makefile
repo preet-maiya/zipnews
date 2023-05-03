@@ -1,5 +1,5 @@
 VERSION=v0
-DOCKERUSER=ash002019
+DOCKERUSER=preethammaiya
 
 
 build:

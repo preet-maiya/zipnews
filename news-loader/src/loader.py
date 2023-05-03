@@ -69,7 +69,7 @@ except Exception as ex:
     traceback.print_exc()
     print("Failed to connect to elasticsearch")
 
-INDEX_NAME = "news"
+INDEX_NAME = "news-v1"
 
 def get_bq_data(client, start_date, end_date, limit=None):
   query = """

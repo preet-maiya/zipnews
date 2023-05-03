@@ -20,7 +20,12 @@ const Navbar = ({ heatmapSelection }) => {
 
     const handleDateChange = (e) => {
         // console.log(e)
-        setSelectedDate(e);
+        // console.log(selectedDate.$d)
+        const date = new Date(e.$d)
+        // console.log(date)
+        // console.log(date.toISOString()  )
+        dispatch(changeDate(date.toISOString()))
+        console.log(date)
     };
     const handleDateSubmit = () => {
         if (selectedDate) {
@@ -39,8 +44,7 @@ const Navbar = ({ heatmapSelection }) => {
         const temp = new dayjs(date)
         const newDate = new dayjs().subtract(7, 'days');
         setSelectedDate(temp)
-        // setMinDate(newDate.subtract(2, 'year'));
-        setMinDate(new dayjs('2021-01-1'))
+        setMinDate(new dayjs('2021-01-1'));
         setMaxDate(new dayjs())
     }, [date])
 
@@ -76,9 +80,6 @@ const Navbar = ({ heatmapSelection }) => {
                         maxDate={dayjs(maxDate)}
                     />
                 </LocalizationProvider>
-                <IconButton onClick={handleDateSubmit}>
-                    <ArrowRightAltRoundedIcon  />
-                </IconButton>
             </Box>
             <SearchBar />
             <FormControl component="fieldset">
