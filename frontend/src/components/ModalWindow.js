@@ -115,7 +115,9 @@ const ModalWindow = ({selectedState }) => {
             if(states.includes(sanitizeStateName(searchValue))) {
                 dispatch(changeState(sanitizeStateName(searchValue)))
             }
-            getSearch()
+            else {
+                getSearch()
+            }
             setOpen(true);
             // dispatch(changeState(searchValue))
         }
