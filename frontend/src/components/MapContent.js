@@ -28,8 +28,10 @@ const MapContent = ({ heatmap, handleRefresh }) => {
     const searchValue = useSelector((state) => state.searchValue.value)
     const dispatch = useDispatch();
     const [count, setCount] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     const getCount = async () => {
+        setLoading(true)
         const d = new dayjs(date).subtract(1, 'days')
         const formattedDate = new Date(d.$d).toISOString().slice(0,10);
         await http.get(`/v1/count?date=${formattedDate}`).then(async (res) => {
@@ -48,6 +50,7 @@ const MapContent = ({ heatmap, handleRefresh }) => {
             console.log(err)
         })
         
+        setLoading(false)
         // const data = await JSON.parse(info.item[1].response[0].body)
         // await data.map(function(data) {
         //     data.state = getStateNameByStateCode(data.state)
@@ -162,7 +165,7 @@ const MapContent = ({ heatmap, handleRefresh }) => {
     // );
     return (
         <Box>
-            {count.length > 0 ? <GeoJSON
+            {!loading ? <GeoJSON
                 data={statesData}
                 key='usa-states'
                 ref={geoJson}
