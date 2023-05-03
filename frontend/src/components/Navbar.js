@@ -39,7 +39,8 @@ const Navbar = ({ heatmapSelection }) => {
         const temp = new dayjs(date)
         const newDate = new dayjs().subtract(7, 'days');
         setSelectedDate(temp)
-        setMinDate(newDate.subtract(2, 'year'));
+        // setMinDate(newDate.subtract(2, 'year'));
+        setMinDate(new dayjs('2021-01-1'))
         setMaxDate(new dayjs())
     }, [date])
 

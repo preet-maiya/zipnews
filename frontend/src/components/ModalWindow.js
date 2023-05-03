@@ -76,7 +76,8 @@ const ModalWindow = ({selectedState }) => {
     const date = useSelector((state) => state.date.value)
 
     const getNews = () => {
-        const formattedDate = new Date(date).toISOString().slice(0,10);
+        const d = new dayjs(date).subtract(1, 'days')
+        const formattedDate = new Date(d.$d).toISOString().slice(0,10);
         const startTime = formattedDate + " 00:00:00"
         const endTime = formattedDate + " 23:59:59"
         console.log('news date',formattedDate)
@@ -114,8 +115,11 @@ const ModalWindow = ({selectedState }) => {
         if (searchValue) {
             if(states.includes(sanitizeStateName(searchValue))) {
                 dispatch(changeState(sanitizeStateName(searchValue)))
+                dispatch(changeSearch(''))
             }
-            getSearch()
+            else {
+                getSearch()
+            }
             setOpen(true);
             // dispatch(changeState(searchValue))
         }
