@@ -6,7 +6,7 @@ APP_NAME = "zipnews"
 
 API_VERSION = "/v1"
 
-ES_INDEX_NAME = "news"
+ES_INDEX_NAME = os.environ.get("ES_INDEX", "news")
 
 NEWS_COUNT = 25
 

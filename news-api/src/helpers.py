@@ -39,7 +39,8 @@ def create_news_resp(results):
             "semantic_score": round(float(src["doc_tone"]), 3),
             "location": src["location"],
             "image_url": src["image_url"],
-            "pub_time": src["published_time"]
+            "pub_time": src["published_time"],
+            "category": src["predicted_category"]
         }
         news.append(info)
     return news
@@ -55,11 +56,11 @@ def get_news_per_state(start_time, end_time, state_code):
     results = []
     for hit in resp:
         results.append(hit)
-    if len(results) > config.NEWS_COUNT:
-        random_selection = random.sample(results, config.NEWS_COUNT)
-    else:
-        random_selection = results # select all available news
-    news = create_news_resp(random_selection)
+    # if len(results) > config.NEWS_COUNT:
+    #     random_selection = random.sample(results, config.NEWS_COUNT)
+    # else:
+    #     random_selection = results # select all available news
+    news = create_news_resp(results)
     print(len(results))
     # print(results[0])
     return news

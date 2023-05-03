@@ -28,6 +28,8 @@ spec:
           value: "elastic"
         - name: ES_HOST
           value: "zipnews-es-http:9200"
+        - name: ES_INDEX
+          value: "news-v1"
         - name: ES_PASSWORD
           valueFrom:
             secretKeyRef:
