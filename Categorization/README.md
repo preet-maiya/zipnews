@@ -1,14 +1,14 @@
-ML Model for News Category Prediction
-This is an ML model that predicts the category of news articles based on their text content. The model has been built using Apache Spark and Python 
-and it has been saved with the name 'ML_Model'.
-Prerequisites
+# Machine Learning Model for News Category Prediction
+## This is an ML model that predicts the category of news articles based on their text content. This has been built using Apache Spark and Python.
+### Prerequisites:
 To use this ML model, you need to have the following installed on your system:
-
 Apache Spark 3.0 or higher
 Python 3.7 or higher
 MLflow 1.20 or higher
 
-Steps to use the model
+## This folder contains 2 files. (i) final_predictions.pkl and (ii) News_Category.ipynb.
+## (i) final_predictions.pkl
+### Steps to use the model
 1. Clone or download the ML_model folder to your local system.
 2. Install the required python modules. You can use pip to install them.
 3. Start a PySpark session in your terminal by running the following command:pyspark
@@ -62,13 +62,29 @@ label_dict = {
 from pyspark.sql.functions import udf
 from pyspark.sql.types import StringType
 
-# define a user-defined function to map category_number to category name
+define a user-defined function to map category_number to category name
 map_label_udf = udf(lambda x: label_dict.get(x), StringType())
 
-# add a new column 'predicted_category' by mapping the category_number column to category name
+add a new column 'predicted_category' by mapping the category_number column to category name
 preds = preds.withColumn('predicted_category', map_label_udf(preds.category_number))
 
-# select only the predicted_category column
+select only the predicted_category column
 predicted_categories = preds.select('predicted_category')
 
 12. Your predicted_categories will contain the string categories.
+
+This text you see here is *actually- written in Markdown! To get a feel
+for Markdown's syntax, type some text into the left window and
+watch the results in the right.
+
+## (ii) News_Catgeory.ipynb
+
+This is the python notebook where all the data is preprocessed, model is trained on training set and this training model is used to get the categories for each 2.8 million row!
+
+- It starts by installing the pyspark library, importing necessary libraries such as pandas, tensorflow, and pyspark, and mounting the Google Drive. Then, it creates a SparkSession and SparkContext, reads in the JSON file, and shows some basic statistics about the data.
+- Next, it processes the data by concatenating the headline and short description into a single "description" column, removing unnecessary columns, and removing any rows where the description is null. It also performs some natural language processing steps such as tokenization and stopword removal. Tokenization is the process of tokenizing the "description" column using the Tokenizer function to split it into individual words. Stop word removal is where we remove stop words (such as "the", "a", "an", etc.) from the tokenized "description" column using the StopWordsRemover function.
+
+- It then encodes the categories as numerical values and prints out the mapping of numerical values to category names. It splits the data into training and testing sets, builds a logistic regression model using the training data, and makes predictions on the test data. It evaluates the performance of the model using metrics such as accuracy and precision.
+
+- Finally, it reads in a separate CSV file with approximate  2.8 million rows and processes it in a similar way to the original data, concatenating the title and contextual text into a single "description" column and removing null values.
+- The model is run on the description column and we get the categories for each data row. This row is then converted to a csv file and returned.

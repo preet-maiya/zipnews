@@ -1,4 +1,7 @@
 zipnews.postman_collection.json
 /.ipynb_checkpoints
-/Category
+Category/
 Create_Category
+ML_model/
+final_predictions.pkl
+Categorization/.DS_Store
