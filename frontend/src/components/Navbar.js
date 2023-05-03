@@ -19,26 +19,9 @@ const Navbar = ({ heatmapSelection }) => {
     const dispatch = useDispatch()
 
     const handleDateChange = (e) => {
-        // console.log(e)
-        // console.log(selectedDate.$d)
         const date = new Date(e.$d)
-        // console.log(date)
-        // console.log(date.toISOString()  )
         dispatch(changeDate(date.toISOString()))
-        console.log(date)
     };
-    const handleDateSubmit = () => {
-        if (selectedDate) {
-            // console.log(selectedDate.$d)
-            const date = new Date(selectedDate.$d)
-            // console.log(date)
-            // console.log(date.toISOString()  )
-            dispatch(changeDate(date.toISOString()))
-            console.log(date)
-        }
-        // Add your date submission logic here
-    };
-
 
     useEffect(() => {
         const temp = new dayjs(date)
@@ -80,6 +63,9 @@ const Navbar = ({ heatmapSelection }) => {
                         maxDate={dayjs(maxDate)}
                     />
                 </LocalizationProvider>
+                {/* <IconButton onClick={handleDateSubmit}>
+                    <ArrowRightAltRoundedIcon  />
+                </IconButton> */}
             </Box>
             <SearchBar />
             <FormControl component="fieldset">
