@@ -12,6 +12,7 @@ import {http} from '../assets/http'
 import { getStateCodeByStateName, getStateNameByStateCode, sanitizeStateCode, sanitizeStateName } from 'us-state-codes';
 import data from '../zipnews.postman_collection.json'
 import dayjs from 'dayjs';
+import Loader from './Loader';
 
 const states = [
     'Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado',
@@ -74,14 +75,16 @@ const ModalWindow = ({selectedState }) => {
     const searchValue = useSelector((state) => state.searchValue.value)
     const dispatch = useDispatch();
     const date = useSelector((state) => state.date.value)
+    const [loading, setLoading] = useState(true);
 
-    const getNews = () => {
+    const getNews = async () => {
+        setLoading(true)
         const d = new dayjs(date).subtract(1, 'days')
         const formattedDate = new Date(d.$d).toISOString().slice(0,10);
         const startTime = formattedDate + " 00:00:00"
         const endTime = formattedDate + " 23:59:59"
         console.log('news date',formattedDate)
-        http.get(`/v1/news?start_time=${startTime}&end_time=${endTime}&state_code=${getStateCodeByStateName(state)}`).then((res) => {
+        await http.get(`/v1/news?start_time=${startTime}&end_time=${endTime}&state_code=${getStateCodeByStateName(state)}`).then((res) => {
             if(res.status === 200) {
                 // setNews([...news, ...res.data.news])
                 setNews([...res.data.news])
@@ -89,17 +92,18 @@ const ModalWindow = ({selectedState }) => {
         }).catch((err) => {
             console.log(err)
         })
+        setLoading(false)
         // setNews([...JSON.parse(data.item[0].response[0].body).news, ...JSON.parse(data.item[0].response[0].body).news])
         // console.log(JSON.parse(data.item[0].response[0].body).news)
     }
 
-    const getSearch = () => {
+    const getSearch = async () => {
+        setLoading(true)
         const d = new dayjs(date).subtract(1, 'days')
         const formattedDate = new Date(d.$d).toISOString().slice(0,10);
         const startTime = formattedDate + " 00:00:00"
         const endTime = formattedDate + " 23:59:59"
-        console.log('news date',formattedDate)
-        http.get(`/v1/search?start_time=${startTime}&end_time=${endTime}&search_phrase=${searchValue}`).then((res) => {
+        await http.get(`/v1/search?start_time=${startTime}&end_time=${endTime}&search_phrase=${searchValue}`).then((res) => {
             if(res.status === 200) {
                 // setNews([...news, ...res.data.news])
                 setNews([...res.data.news])
@@ -107,6 +111,7 @@ const ModalWindow = ({selectedState }) => {
         }).catch((err) => {
             console.log(err)
         })
+        setLoading(false)
         // setNews([...JSON.parse(data.item[0].response[0].body).news, ...JSON.parse(data.item[0].response[0].body).news])
         // console.log(JSON.parse(data.item[0].response[0].body).news)
     }
@@ -199,17 +204,13 @@ const ModalWindow = ({selectedState }) => {
                             <Close />
                         </IconButton>
                     </Stack>
-                    {/* <Stack direction="row" justifyContent="space-around" mt={2} padding='0 10px 10px 10px'> */}
-                        {/* <Typography width="15%">
-                            Some filters
-                        </Typography> */}
-                        {news.length > 0 ? <Stack direction="row" sx={{ gap: { xl: '12px', lg: '7px', xs: '2px' } }} flexWrap="wrap" justifyContent="center" alignItems="stretch">
+                        {(news.length > 0 || !loading) ? <Stack direction="row" sx={{ gap: { xl: '12px', lg: '7px', xs: '2px' } }} flexWrap="wrap" justifyContent="center" alignItems="stretch">
                             {news.map((news, index) => {
                                 return <Card props={news} key={index} />
                             })}
 
-                        </Stack> : 'There are no news.'}
-                    {/* </Stack> */}
+                        </Stack> : <Loader />}
+                        {(news.length == 0 && !loading) ? <h1 style={{textAlign: 'center'}}>No news found.</h1> : '' }
                 </Box>
             </Fade>
         </Modal>

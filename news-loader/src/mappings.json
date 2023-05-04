@@ -33,7 +33,7 @@
                 "type": "text"
             },
             "catogery": {
-                "type": "integer"
+                "type": "text"
             },
             "source": {
                 "type": "text"

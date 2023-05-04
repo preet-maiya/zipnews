@@ -1,4 +1,5 @@
 from flask import Flask, Response, make_response, jsonify, request
+from flask_cors import CORS, cross_origin
 import config
 import json
 import datetime
@@ -10,11 +11,13 @@ from validator import valid_date_format, valid_dates
 
 app = Flask(__name__)
 base_route = config.API_VERSION
+CORS(app)
 
 @app.route(f"{base_route}/")
 @app.route(f"{base_route}/health")
 @app.route("/")
 @app.route("/health")
+@cross_origin()
 def hello():
     resp = {
         "validPaths": ["/v1/count","/v1/news?start_time=<start_time>&end_time=<end_time>&state_code=<code>"],
@@ -24,6 +27,7 @@ def hello():
     return Response(response=json.dumps(resp), status=200, mimetype="application/json")
 
 @app.route(f"{base_route}/news", methods=["GET"])
+@cross_origin()
 def get_news():
     try:
         start_time = request.args.get("start_time")
@@ -45,6 +49,7 @@ def get_news():
 
 
 @app.route(f"{base_route}/search", methods=["GET"])
+@cross_origin()
 def search_news():
     try:
         start_time = request.args.get("start_time")
@@ -63,6 +68,7 @@ def search_news():
 
 
 @app.route(f"{base_route}/count", methods=["GET"])
+@cross_origin()
 def get_count():
     try:
         date = request.args.get("date")

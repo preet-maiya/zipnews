@@ -49,6 +49,9 @@ export default function NewsCard(props) {
                         <Typography component="div" fontSize="10px" fontWeight="ligher">
                             Published On: {news.pub_time}
                         </Typography>
+                        <Typography component="div" fontSize="10px" fontWeight="ligher">
+                            Category: {news.category}
+                        </Typography>
                         <Typography fontSize="13px" fontWeight="bold">
                             Click card to read at source
                         </Typography>
